@@ -2,17 +2,151 @@
 <html lang="zh-CN">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 	<title>合成小猫</title>
 	<style>
-		body {font-family: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: #f7f7fb; color:#222; display:flex; flex-direction:column; align-items:center; padding:20px;}
-		header {text-align:center;}
-		#controls {margin:12px 0;}
-		button#spawn {padding:12px 20px; font-size:16px; cursor:pointer; border-radius:8px; background:linear-gradient(#ffd, #ffb); border:1px solid #e5a;}
-		#board {width:760px; max-width:100%; min-height:200px; display:grid; grid-template-columns: repeat(auto-fill, minmax(80px,1fr)); gap:12px; padding:12px; background:white; border-radius:12px; box-shadow:0 4px 12px rgba(20,20,40,0.06);}
-		.kitten {background:linear-gradient(white, #fff7); border-radius:10px; padding:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:28px; user-select:none; transition: transform .18s ease, box-shadow .18s ease; position:relative;}
-		.kitten .coin-badge {position:absolute; right:6px; top:6px; background:rgba(255,255,255,0.9); padding:3px 6px; border-radius:8px; font-size:11px; color:#b05; box-shadow:0 2px 6px rgba(0,0,0,0.06);}
-		.kitten .level {font-size:12px;color:#666;margin-top:6px;}
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			touch-action: manipulation; /* 优化移动端触控 */
+		}
+		body {
+			font-family: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+			background: #f7f7fb; 
+			color:#222; 
+			display:flex; 
+			flex-direction:column; 
+			align-items:center; 
+			padding: 12px;
+			min-height: 100vh;
+		}
+		header {
+			text-align:center;
+			margin-bottom: 16px;
+			width: 100%;
+		}
+		header h1 {
+			font-size: 24px;
+			margin-bottom: 8px;
+		}
+		header p {
+			font-size: 14px;
+			color: #666;
+		}
+		#controls {
+			margin: 12px 0;
+			width: 100%;
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 8px;
+		}
+		button#spawn {
+			padding: 14px 24px;
+			font-size: 16px;
+			cursor: pointer;
+			border-radius: 8px;
+			background:linear-gradient(#ffd, #ffb); 
+			border:1px solid #e5a;
+			flex: 1;
+			min-width: 120px;
+		}
+		#spawn-cost {
+			font-size: 12px; 
+			color:#666;
+			white-space: nowrap;
+		}
+		#auto-merge-wrapper {
+			display: flex;
+			align-items: center;
+			font-size: 14px;
+			margin: 4px 0;
+		}
+		#auto-merge {
+			margin-right: 6px;
+		}
+		#player {
+			width: 100%;
+			margin: 8px 0;
+		}
+		#player > div:first-child {
+			font-size: 14px;
+			margin-bottom: 6px;
+		}
+		#player-exp-bar-container {
+			width: 100%; 
+			background:#eee; 
+			border-radius: 999px; 
+			height: 10px; 
+			overflow:hidden;
+		}
+		#player-exp-bar {
+			height:100%; 
+			width:0%; 
+			background:linear-gradient(90deg,#ffd27a,#ffb86b);
+		}
+		#player-exp-text {
+			font-size: 12px;
+			color:#666;
+			margin-top: 4px;
+		}
+		#coins-panel {
+			width: 100%;
+			margin: 4px 0;
+		}
+		#coins-panel > div:first-child {
+			font-size: 14px;
+		}
+		#coins-panel > div:last-child {
+			font-size: 12px;
+			color:#666;
+		}
+		#board {
+			width: 100%;
+			min-height: 200px;
+			display:grid; 
+			grid-template-columns: repeat(auto-fill, minmax(70px,1fr)); 
+			gap: 8px; 
+			padding: 12px; 
+			background:white; 
+			border-radius: 12px; 
+			box-shadow:0 4px 12px rgba(20,20,40,0.06);
+			margin-bottom: 16px;
+			overflow-y: auto;
+			max-height: calc(100vh - 320px);
+		}
+		.kitten {
+			background:linear-gradient(white, #fff7); 
+			border-radius: 10px; 
+			padding: 8px; 
+			display:flex; 
+			flex-direction:column; 
+			align-items:center; 
+			justify-content:center; 
+			font-size: 24px; 
+			user-select:none; 
+			transition: transform .18s ease, box-shadow .18s ease; 
+			position:relative;
+			min-height: 70px;
+			touch-action: none; /* 禁用默认触控行为，优化拖拽 */
+		}
+		.kitten .coin-badge {
+			position:absolute; 
+			right:4px; 
+			top:4px; 
+			background:rgba(255,255,255,0.9); 
+			padding:2px 4px; 
+			border-radius:8px; 
+			font-size: 10px; 
+			color:#b05; 
+			box-shadow:0 2px 6px rgba(0,0,0,0.06);
+		}
+		.kitten .level {
+			font-size: 11px;
+			color:#666;
+			margin-top: 4px;
+		}
 		.kitten.l0 {background: linear-gradient(#fff, #f8f8ff);} 
 		.kitten.l1 {background: linear-gradient(#fff6e6,#fff0d9);} 
 		.kitten.l2 {background: linear-gradient(#e9f7ff,#dbf2ff);} 
@@ -21,19 +155,367 @@
 		.kitten.combine {transform:scale(1.08); box-shadow:0 6px 18px rgba(0,0,0,0.12);} 
 		.kitten.dragging {opacity:0.6; transform:scale(0.98);} 
 		.footer {margin-top:12px;color:#666;}
-		.stats {display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:8px;}
-		.badge {background:#fff; padding:6px 10px; border-radius:999px; box-shadow:0 2px 6px rgba(0,0,0,0.04);} 
-		#start-screen {position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(rgba(10,10,20,0.35), rgba(10,10,20,0.35)); z-index:60}
-		#start-screen .start-card {background:white; padding:24px; border-radius:12px; box-shadow:0 8px 30px rgba(20,20,40,0.12); text-align:center}
+		.stats {
+			display:flex; 
+			gap: 6px; 
+			flex-wrap:wrap; 
+			justify-content:center; 
+			margin-top: 8px;
+			width: 100%;
+		}
+		.badge {
+			background:#fff; 
+			padding:4px 8px; 
+			border-radius:999px; 
+			box-shadow:0 2px 6px rgba(0,0,0,0.04);
+			font-size: 12px;
+		} 
+		/* 成就展示 - 右下角小弹窗 */
+		#achievement-notification {
+			position: fixed;
+			bottom: 20px;
+			right: 20px;
+			background: linear-gradient(135deg, #ffd27a, #ffb86b);
+			padding: 16px 20px;
+			border-radius: 12px;
+			box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+			text-align: left;
+			z-index: 100;
+			transform: translateX(120%);
+			transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+			max-width: 280px;
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+		#achievement-notification.show { transform: translateX(0); }
+		#achievement-notification .ach-emoji {
+			font-size: 36px;
+			flex-shrink: 0;
+		}
+		#achievement-notification .ach-content {
+			flex: 1;
+		}
+		#achievement-notification .ach-title {
+			font-size: 16px;
+			font-weight: bold;
+			color: #8b4513;
+			margin-bottom: 2px;
+		}
+		#achievement-notification .ach-desc {
+			font-size: 12px;
+			color: #a0522d;
+		}
+		#achievement-notification .ach-reward {
+			font-size: 12px;
+			color: #d35400;
+			margin-top: 4px;
+			font-weight: bold;
+		}
+		/* 成就浏览界面 */
+		#achievements-panel {
+			position: fixed;
+			inset: 0;
+			background: rgba(0,0,0,0.5);
+			display: none;
+			align-items: center;
+			justify-content: center;
+			z-index: 200;
+			padding: 20px;
+		}
+		#achievements-panel.show { display: flex; }
+		#achievements-content {
+			background: white;
+			border-radius: 16px;
+			width: 100%;
+			max-width: 400px;
+			max-height: 80vh;
+			overflow: hidden;
+		}
+		#achievements-header {
+			background: linear-gradient(135deg, #ffd27a, #ffb86b);
+			padding: 20px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+		#achievements-header h2 {
+			font-size: 20px;
+			color: #8b4513;
+			margin: 0;
+		}
+		#achievements-close {
+			font-size: 24px;
+			cursor: pointer;
+			color: #8b4513;
+		}
+		#achievements-list {
+			padding: 12px;
+			overflow-y: auto;
+			max-height: calc(80vh - 80px);
+		}
+		.achievement-item {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 12px;
+			border-radius: 10px;
+			margin-bottom: 8px;
+			background: #f9f9f9;
+			opacity: 0.5;
+			filter: grayscale(1);
+		}
+		.achievement-item.unlocked {
+			opacity: 1;
+			filter: grayscale(0);
+			background: linear-gradient(135deg, #fff8f0, #fff0e0);
+		}
+		.achievement-item .ach-icon {
+			font-size: 28px;
+		}
+		.achievement-item .ach-info {
+			flex: 1;
+		}
+		.achievement-item .ach-name {
+			font-weight: bold;
+			font-size: 14px;
+		}
+		.achievement-item .ach-desc {
+			font-size: 12px;
+			color: #666;
+		}
+		.achievement-item .ach-lock {
+			font-size: 20px;
+			color: #999;
+		}
+		.achievement-item.unlocked .ach-lock {
+			display: none;
+		}
+		/* 商店界面 */
+		#shop-panel {
+			position: fixed;
+			inset: 0;
+			background: rgba(0,0,0,0.5);
+			display: none;
+			align-items: center;
+			justify-content: center;
+			z-index: 200;
+			padding: 20px;
+		}
+		#shop-panel.show { display: flex; }
+		#shop-content {
+			background: white;
+			border-radius: 16px;
+			width: 100%;
+			max-width: 400px;
+			max-height: 80vh;
+			overflow: hidden;
+		}
+		#shop-header {
+			background: linear-gradient(135deg, #9b59b6, #8e44ad);
+			padding: 20px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+		#shop-header h2 {
+			font-size: 20px;
+			color: white;
+			margin: 0;
+		}
+		#shop-close {
+			font-size: 24px;
+			cursor: pointer;
+			color: white;
+		}
+		#shop-red-diamonds {
+			font-size: 16px;
+			color: #ffd27a;
+			font-weight: bold;
+		}
+		#shop-items {
+			padding: 12px;
+			overflow-y: auto;
+			max-height: calc(80vh - 100px);
+		}
+		.shop-item {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 16px;
+			border-radius: 12px;
+			margin-bottom: 12px;
+			background: linear-gradient(135deg, #f8f8ff, #f0f0ff);
+			border: 1px solid #e8e8ff;
+		}
+		.shop-item .item-icon {
+			font-size: 36px;
+		}
+		.shop-item .item-info {
+			flex: 1;
+		}
+		.shop-item .item-name {
+			font-weight: bold;
+			font-size: 16px;
+			margin-bottom: 4px;
+		}
+		.shop-item .item-desc {
+			font-size: 12px;
+			color: #666;
+		}
+		.shop-item .item-buy {
+			padding: 8px 16px;
+			background: linear-gradient(135deg, #9b59b6, #8e44ad);
+			color: white;
+			border: none;
+			border-radius: 20px;
+			cursor: pointer;
+			font-size: 14px;
+			font-weight: bold;
+		}
+		.shop-item .item-buy:disabled {
+			background: #ccc;
+			cursor: not-allowed;
+		}
+		#menu-buttons {
+			display: flex;
+			gap: 8px;
+			margin-top: 8px;
+		}
+		#achievements-btn, #shop-btn {
+			padding: 10px 16px;
+			font-size: 14px;
+			border-radius: 8px;
+			border: none;
+			cursor: pointer;
+		}
+		#achievements-btn {
+			background: linear-gradient(#ffd27a, #ffb86b);
+			color: #8b4513;
+		}
+		#shop-btn {
+			background: linear-gradient(#9b59b6, #8e44ad);
+			color: white;
+		}
+		/* 左下角物品栏 */
+		#inventory-panel {
+			position: fixed;
+			bottom: 20px;
+			left: 20px;
+			display: flex;
+			gap: 12px;
+			z-index: 90;
+		}
+		.inventory-item {
+			width: 56px;
+			height: 56px;
+			background: white;
+			border-radius: 12px;
+			box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 28px;
+			cursor: pointer;
+			position: relative;
+			transition: transform 0.15s ease, box-shadow 0.15s ease;
+			user-select: none;
+		}
+		.inventory-item:hover {
+			transform: scale(1.05);
+			box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+		}
+		.inventory-item:active {
+			transform: scale(0.95);
+		}
+		.inventory-item.disabled {
+			filter: grayscale(1);
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+		.inventory-item.disabled:hover {
+			transform: none;
+			box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+		}
+		.inventory-item .item-count {
+			position: absolute;
+			bottom: -4px;
+			right: -4px;
+			background: #e74c3c;
+			color: white;
+			font-size: 12px;
+			font-weight: bold;
+			min-width: 20px;
+			height: 20px;
+			border-radius: 10px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0 4px;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+		}
+		.inventory-item.disabled .item-count {
+			background: #999;
+		}
+		.inventory-item.using {
+			animation: pulse 0.5s ease-in-out infinite;
+		}
+		@keyframes pulse {
+			0%, 100% { transform: scale(1); }
+			50% { transform: scale(1.1); }
+		}
+		#start-screen {
+			position:fixed; 
+			inset:0; 
+			display:flex; 
+			align-items:center; 
+			justify-content:center; 
+			background:linear-gradient(rgba(10,10,20,0.35), rgba(10,10,20,0.35)); 
+			z-index:60;
+			padding: 20px;
+		}
+		#start-screen .start-card {
+			background:white; 
+			padding: 24px; 
+			border-radius:12px; 
+			box-shadow:0 8px 30px rgba(20,20,40,0.12); 
+			text-align:center;
+			width: 100%;
+			max-width: 320px;
+		}
+		#start-screen h2 {
+			font-size: 20px;
+			margin-bottom: 16px;
+		}
+		#start-coins {
+			width:80px;
+			padding:6px;
+			border-radius:6px;
+			border:1px solid #ddd;
+			text-align: center;
+		}
+		#start-btn {
+			padding:12px 20px;
+			border-radius:8px;
+			font-size:16px;
+			cursor:pointer;
+			background: #ffd27a;
+			border: none;
+			margin: 12px 0;
+			width: 100%;
+		}
+		#game-root {
+			width: 100%;
+		}
 	</style>
 </head>
 <body>
 	<div id="start-screen">
 		<div class="start-card">
 			<h2>合成小猫 — 点击开始</h2>
-			<div style="margin:8px 0">初始金币: <input id="start-coins" type="number" min="0" value="50" style="width:80px;padding:4px;border-radius:6px;border:1px solid #ddd"></div>
-			<button id="start-btn" style="padding:10px 16px;border-radius:8px;font-size:16px;cursor:pointer">开始游戏</button>
-			<div style="font-size:12px;color:#666;margin-top:8px">按空格也可生成小猫，拖拽或自动合成。</div>
+			<div style="margin:8px 0">初始金币: <input id="start-coins" type="number" min="0" value="50"></div>
+			<button id="start-btn">开始游戏</button>
+			<div style="font-size:12px;color:#666;margin-top:8px">按空格/点击生成小猫，拖拽或自动合成。</div>
 		</div>
 	</div>
 
@@ -44,25 +526,93 @@
 	</header>
 	<div id="controls">
 		<button id="spawn">生成小猫</button>
-		<div id="spawn-cost" style="display:inline-block; margin-left:12px; font-size:12px; color:#666; vertical-align:middle">本次生成费用: 0</div>
-		<label style="margin-left:12px; font-size:14px; vertical-align:middle;">
-			<input type="checkbox" id="auto-merge" checked> 自动合成
-		</label>
-		<div id="player" style="display:inline-block;margin-left:12px;vertical-align:middle">
-			<div style="font-size:14px;margin-bottom:6px">玩家 等级 <span id="player-level">1</span></div>
-			<div style="width:200px; background:#eee; border-radius:999px; height:10px; overflow:hidden">
-				<div id="player-exp-bar" style="height:100%; width:0%; background:linear-gradient(90deg,#ffd27a,#ffb86b)"></div>
-			</div>
-			<div style="font-size:12px;color:#666;margin-top:4px">经验: <span id="player-exp">0</span>/<span id="player-exp-next">15</span></div>
+		<div id="spawn-cost">本次生成费用: 0</div>
+		<div id="auto-merge-wrapper">
+			<input type="checkbox" id="auto-merge" checked> 
+			<label for="auto-merge">自动合成</label>
 		</div>
-		<div id="coins-panel" style="display:inline-block; margin-left:16px; vertical-align:middle; text-align:left">
-			<div style="font-size:14px">金币: <span id="coins">50</span></div>
-			<div style="font-size:12px;color:#666">产出: <span id="prod-per-minute">0</span>/min （<span id="prod-per-second">0</span>/s）</div>
+		<div id="player">
+			<div>玩家 等级 <span id="player-level">1</span></div>
+			<div id="player-exp-bar-container">
+				<div id="player-exp-bar"></div>
+			</div>
+			<div id="player-exp-text">经验: <span id="player-exp">0</span>/<span id="player-exp-next">15</span></div>
+		</div>
+		<div id="coins-panel">
+			<div>金币: <span id="coins">50</span></div>
+			<div>产出: <span id="prod-per-minute">0</span>/min （<span id="prod-per-second">0</span>/s）</div>
+		</div>
+		<div id="menu-buttons">
+			<button id="achievements-btn">🏆 成就</button>
+			<button id="shop-btn">🛒 商店</button>
 		</div>
 	</div>
 	<div id="board" aria-live="polite"></div>
 	<div class="stats" id="counts"></div>
+	</div>
 
+	<!-- 成就展示 - 右下角小弹窗 -->
+	<div id="achievement-notification">
+		<div class="ach-emoji" id="ach-emoji">🏆</div>
+		<div class="ach-content">
+			<div class="ach-title" id="ach-title">成就解锁!</div>
+			<div class="ach-desc" id="ach-desc">描述</div>
+			<div class="ach-reward" id="ach-reward">+15 红钻</div>
+		</div>
+	</div>
+
+	<!-- 左下角物品栏 -->
+	<div id="inventory-panel">
+		<div class="inventory-item" id="fish-item" onclick="useFish()">
+			🐟
+			<div class="item-count" id="fish-count">0</div>
+		</div>
+		<div class="inventory-item" id="arm-item" onclick="useArm()">
+			🦾
+			<div class="item-count" id="arm-count">0</div>
+		</div>
+	</div>
+
+	<!-- 成就浏览面板 -->
+	<div id="achievements-panel">
+		<div id="achievements-content">
+			<div id="achievements-header">
+				<h2>🏆 成就收藏</h2>
+				<span id="achievements-close" onclick="closeAchievements()">×</span>
+			</div>
+			<div id="achievements-list"></div>
+		</div>
+	</div>
+
+	<!-- 商店面板 -->
+	<div id="shop-panel">
+		<div id="shop-content">
+			<div id="shop-header">
+				<h2>🛒 商店</h2>
+				<div>
+					<span id="shop-red-diamonds">💎 0</span>
+					<span id="shop-close" onclick="closeShop()" style="margin-left: 12px;">×</span>
+				</div>
+			</div>
+			<div id="shop-items">
+				<div class="shop-item">
+					<div class="item-icon">🐟</div>
+					<div class="item-info">
+						<div class="item-name">小鱼干</div>
+						<div class="item-desc">使用后立即获得50金币</div>
+					</div>
+					<button class="item-buy" onclick="buyItem('fish')">💎 20</button>
+				</div>
+				<div class="shop-item">
+					<div class="item-icon">🦾</div>
+					<div class="item-info">
+						<div class="item-name">机械臂</div>
+						<div class="item-desc">自动合成速度提升50%</div>
+					</div>
+					<button class="item-buy" onclick="buyItem('arm')">💎 35</button>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<script>
@@ -74,16 +624,41 @@
 		const prodPerMinEl = document.getElementById('prod-per-minute');
 		const prodPerSecEl = document.getElementById('prod-per-second');
 		const countsEl = document.getElementById('counts');
+		const achievementNotif = document.getElementById('achievement-notification');
+		const achEmoji = document.getElementById('ach-emoji');
+		const achTitle = document.getElementById('ach-title');
+		const achDesc = document.getElementById('ach-desc');
+		const achReward = document.getElementById('ach-reward');
+		const achievementsBtn = document.getElementById('achievements-btn');
+		const achievementsPanel = document.getElementById('achievements-panel');
+		const achievementsList = document.getElementById('achievements-list');
+		const shopBtn = document.getElementById('shop-btn');
+		const shopPanel = document.getElementById('shop-panel');
+		const shopRedDiamonds = document.getElementById('shop-red-diamonds');
 
 		let idCounter = 0;
 		const kittens = []; // {id, level, el}
 
 		const player = { level: 1, exp: 0 };
 		let coins = 50; // 初始金币
+		let totalCoinsEarned = 0; // 累计获得的金币
+		let redDiamonds = 0; // 红钻
 		let autoMergeEnabled = true;
 		let prodPerMinute = 0;
 		let nextSpawnPreview = null;
 		let audioCtx = null;
+		let unlockedLevels = new Set(); // 记录已解锁的等级成就
+		let unlockedCoinMilestones = new Set(); // 记录已解锁的金币里程碑
+		let mergeSpeedBonus = 1; // 合成速度加成
+		
+		// 物品数量
+		let fishCount = 0; // 小鱼干数量
+		let armCount = 0; // 机械臂数量
+		
+		// 物品效果状态
+		let fishActive = false; // 小鱼干是否激活
+		let armActive = false; // 机械臂是否激活
+		let autoSpawnInterval = null; // 自动点击定时器
 
 		function getAudioContext() {
 			if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -122,22 +697,339 @@
 			osc.stop(ctx.currentTime + 0.24);
 		}
 
+		// 喵声音效
 		function playMeowSound() {
 			const ctx = getAudioContext();
 			if (!ctx) return;
-			const osc = ctx.createOscillator();
+			
+			const osc1 = ctx.createOscillator();
+			const osc2 = ctx.createOscillator();
 			const gain = ctx.createGain();
-			osc.type = 'sine';
-			// meow: start at ~700Hz, slide down to ~350Hz
-			osc.frequency.setValueAtTime(700, ctx.currentTime);
-			osc.frequency.exponentialRampToValueAtTime(350, ctx.currentTime + 0.15);
-			osc.frequency.exponentialRampToValueAtTime(500, ctx.currentTime + 0.25);
-			gain.gain.setValueAtTime(0.25, ctx.currentTime);
-			gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.28);
-			osc.connect(gain);
+			
+			osc1.type = 'sine';
+			osc2.type = 'triangle';
+			
+			// 模拟猫叫的频率变化
+			const now = ctx.currentTime;
+			osc1.frequency.setValueAtTime(800, now);
+			osc1.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
+			osc1.frequency.exponentialRampToValueAtTime(900, now + 0.25);
+			
+			osc2.frequency.setValueAtTime(400, now);
+			osc2.frequency.exponentialRampToValueAtTime(600, now + 0.1);
+			
+			gain.gain.setValueAtTime(0.25, now);
+			gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+			
+			osc1.connect(gain);
+			osc2.connect(gain);
 			gain.connect(ctx.destination);
-			osc.start();
-			osc.stop(ctx.currentTime + 0.28);
+			
+			osc1.start(now);
+			osc2.start(now);
+			osc1.stop(now + 0.4);
+			osc2.stop(now + 0.4);
+		}
+
+		// 成就获得音效 - 高昂的庆祝音效
+		function playAchievementSound() {
+			const ctx = getAudioContext();
+			if (!ctx) return;
+			
+			const now = ctx.currentTime;
+			
+			// 上升音阶
+			const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+			
+			notes.forEach((freq, i) => {
+				const osc = ctx.createOscillator();
+				const gain = ctx.createGain();
+				osc.type = 'sine';
+				osc.frequency.setValueAtTime(freq, now + i * 0.1);
+				gain.gain.setValueAtTime(0.3, now + i * 0.1);
+				gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.15);
+				osc.connect(gain);
+				gain.connect(ctx.destination);
+				osc.start(now + i * 0.1);
+				osc.stop(now + i * 0.1 + 0.15);
+			});
+			
+			// 鼓点
+			const noise = ctx.createBufferSource();
+			const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 0.1, ctx.sampleRate);
+			const output = noiseBuffer.getChannelData(0);
+			for (let i = 0; i < noiseBuffer.length; i++) {
+				output[i] = Math.random() * 2 - 1;
+			}
+			noise.buffer = noiseBuffer;
+			const noiseGain = ctx.createGain();
+			noiseGain.gain.setValueAtTime(0.1, now);
+			noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+			noise.connect(noiseGain);
+			noiseGain.connect(ctx.destination);
+			noise.start(now);
+		}
+
+		// 成就配置
+		const achievements = {
+			1: { emoji: '🐱', title: '新手上路', desc: '成功合成第1级小猫！' },
+			2: { emoji: '🐈', title: '初露锋芒', desc: '合成了第2级小猫！' },
+			3: { emoji: '😺', title: '渐入佳境', desc: '合成了第3级小猫！' },
+			4: { emoji: '😸', title: '技艺精湛', desc: '合成了第4级小猫！' },
+			5: { emoji: '😻', title: '猫界大师', desc: '合成了第5级小猫！' },
+			6: { emoji: '🎉', title: '传奇猫王', desc: '合成了第6级小猫！太棒了！' },
+		};
+
+		// 显示成就
+		function showAchievement(level, reward = 15) {
+			if (unlockedLevels.has(level)) return;
+			
+			unlockedLevels.add(level);
+			const ach = achievements[level] || {
+				emoji: '🏆',
+				title: `等级 ${level} 解锁!`,
+				desc: '恭喜你合成了更高级的小猫！'
+			};
+			
+			achEmoji.textContent = ach.emoji;
+			achTitle.textContent = ach.title;
+			achDesc.textContent = ach.desc;
+			achReward.textContent = `+${reward} 红钻`;
+			
+			redDiamonds += reward;
+			updateRedDiamondUI();
+			
+			// 播放成就音效
+			playAchievementSound();
+			
+			achievementNotif.classList.add('show');
+			
+			// 3秒后自动关闭
+			setTimeout(() => {
+				achievementNotif.classList.remove('show');
+			}, 3000);
+		}
+
+		// 金币里程碑成就
+		const coinMilestones = {
+			100: { emoji: '💰', title: '第一桶金', desc: '累计获得100金币！', reward: 15 },
+			10000: { emoji: '💎', title: '初具成型', desc: '累计获得10,000金币！', reward: 50 },
+			1000000: { emoji: '👑', title: '金币大亨', desc: '累计获得1,000,000金币！', reward: 200 },
+			1000000000: { emoji: '🏦', title: '华尔街的狼', desc: '累计获得1,000,000,000金币！', reward: 500 }
+		};
+
+		// 检查金币里程碑
+		function checkCoinMilestones() {
+			for (const threshold of Object.keys(coinMilestones).map(Number).sort((a,b)=>a-b)) {
+				if (totalCoinsEarned >= threshold && !unlockedCoinMilestones.has(threshold)) {
+					unlockedCoinMilestones.add(threshold);
+					const ach = coinMilestones[threshold];
+					
+					achEmoji.textContent = ach.emoji;
+					achTitle.textContent = ach.title;
+					achDesc.textContent = ach.desc;
+					achReward.textContent = `+${ach.reward} 红钻`;
+					
+					redDiamonds += ach.reward;
+					updateRedDiamondUI();
+					
+					// 播放成就音效
+					playAchievementSound();
+					
+					achievementNotif.classList.add('show');
+					
+					setTimeout(() => {
+						achievementNotif.classList.remove('show');
+					}, 3000);
+				}
+			}
+		}
+
+		// 更新红钻UI
+		function updateRedDiamondUI() {
+			const panel = document.getElementById('coins-panel');
+			let rdEl = document.getElementById('red-diamonds-display');
+			if (!rdEl) {
+				rdEl = document.createElement('div');
+				rdEl.id = 'red-diamonds-display';
+				rdEl.style.fontSize = '14px';
+				rdEl.style.color = '#e74c3c';
+				rdEl.style.marginTop = '4px';
+				panel.appendChild(rdEl);
+			}
+			rdEl.textContent = `红钻: 💎 ${redDiamonds}`;
+			shopRedDiamonds.textContent = `💎 ${redDiamonds}`;
+		}
+
+		// 打开成就面板
+		function openAchievements() {
+			achievementsList.innerHTML = '';
+			
+			// 等级成就
+			const levelAchs = Object.keys(achievements).map(Number).sort((a,b)=>a-b);
+			levelAchs.forEach(lvl => {
+				const ach = achievements[lvl];
+				const unlocked = unlockedLevels.has(lvl);
+				const item = document.createElement('div');
+				item.className = `achievement-item ${unlocked ? 'unlocked' : ''}`;
+				item.innerHTML = `
+					<div class="ach-icon">${unlocked ? ach.emoji : '❓'}</div>
+					<div class="ach-info">
+						<div class="ach-name">${ach.title}</div>
+						<div class="ach-desc">${ach.desc}</div>
+					</div>
+					<div class="ach-lock">🔒</div>
+				`;
+				achievementsList.appendChild(item);
+			});
+			
+			// 金币里程碑成就
+			const coinAchs = Object.keys(coinMilestones).map(Number).sort((a,b)=>a-b);
+			coinAchs.forEach(threshold => {
+				const ach = coinMilestones[threshold];
+				const unlocked = unlockedCoinMilestones.has(threshold);
+				const item = document.createElement('div');
+				item.className = `achievement-item ${unlocked ? 'unlocked' : ''}`;
+				item.innerHTML = `
+					<div class="ach-icon">${unlocked ? ach.emoji : '❓'}</div>
+					<div class="ach-info">
+						<div class="ach-name">${ach.title}</div>
+						<div class="ach-desc">${ach.desc}</div>
+					</div>
+					<div class="ach-lock">🔒</div>
+				`;
+				achievementsList.appendChild(item);
+			});
+			
+			achievementsPanel.classList.add('show');
+		}
+
+		// 关闭成就面板
+		function closeAchievements() {
+			achievementsPanel.classList.remove('show');
+		}
+
+		// 打开商店
+		function openShop() {
+			updateRedDiamondUI();
+			shopPanel.classList.add('show');
+		}
+
+		// 关闭商店
+		function closeShop() {
+			shopPanel.classList.remove('show');
+		}
+
+		// 购买物品
+		function buyItem(itemId) {
+			const items = {
+				fish: { cost: 20, name: '小鱼干' },
+				arm: { cost: 35, name: '机械臂' }
+			};
+			
+			const item = items[itemId];
+			if (!item) return;
+			
+			if (redDiamonds < item.cost) {
+				return;
+			}
+			
+			redDiamonds -= item.cost;
+			updateRedDiamondUI();
+			
+			if (itemId === 'fish') {
+				fishCount++;
+				updateInventoryUI();
+			} else if (itemId === 'arm') {
+				armCount++;
+				updateInventoryUI();
+			}
+		}
+
+		// 更新物品栏UI
+		function updateInventoryUI() {
+			const fishItem = document.getElementById('fish-item');
+			const armItem = document.getElementById('arm-item');
+			const fishCountEl = document.getElementById('fish-count');
+			const armCountEl = document.getElementById('arm-count');
+			
+			fishCountEl.textContent = fishCount;
+			armCountEl.textContent = armCount;
+			
+			if (fishCount > 0) {
+				fishItem.classList.remove('disabled');
+			} else {
+				fishItem.classList.add('disabled');
+			}
+			
+			if (armCount > 0) {
+				armItem.classList.remove('disabled');
+			} else {
+				armItem.classList.add('disabled');
+			}
+			
+			// 更新激活状态
+			if (fishActive) {
+				fishItem.classList.add('using');
+			} else {
+				fishItem.classList.remove('using');
+			}
+			
+			if (armActive) {
+				armItem.classList.add('using');
+			} else {
+				armItem.classList.remove('using');
+			}
+		}
+
+		// 使用小鱼干 - 加速金币生产10秒
+		function useFish() {
+			if (fishCount <= 0) {
+				alert('小鱼干数量不足！');
+				return;
+			}
+			
+			fishCount--;
+			fishActive = true;
+			updateInventoryUI();
+			
+			// 金币生产速度加快5倍，持续10秒
+			prodPerMinute *= 5;
+			updateCoinUI();
+			
+			setTimeout(() => {
+				fishActive = false;
+				prodPerMinute = kittens.reduce((s,k)=> s + (k.level+1)*(k.level+1), 0);
+				updateCoinUI();
+				updateInventoryUI();
+			}, 10000);
+		}
+
+		// 使用机械臂 - 自动点击生成小猫15秒
+		function useArm() {
+			if (armCount <= 0) {
+				alert('机械臂数量不足！');
+				return;
+			}
+			
+			armCount--;
+			armActive = true;
+			updateInventoryUI();
+			
+			// 每秒自动点击生成小猫
+			autoSpawnInterval = setInterval(() => {
+				spawnBtn.click();
+			}, 1000);
+			
+			// 15秒后停止
+			setTimeout(() => {
+				armActive = false;
+				if (autoSpawnInterval) {
+					clearInterval(autoSpawnInterval);
+					autoSpawnInterval = null;
+				}
+				updateInventoryUI();
+			}, 15000);
 		}
 
 		function getSpawnPreview() {
@@ -210,7 +1102,7 @@
 			coins = (isNaN(v) || v < 0) ? 50 : v;
 			// show game
 			startScreen.style.display = 'none';
-			gameRoot.style.display = '';
+			gameRoot.style.display = 'block';
 			getAudioContext();
 			refreshSpawnPreview();
 			updateCoinUI();
@@ -248,7 +1140,7 @@
 			});
 		}
 
-		function createKitten(level=0, animate=true) {
+		function createKitten(level=0, animate=true, isMerge=false) {
 			const id = ++idCounter;
 			const el = document.createElement('div');
 			el.className = `kitten l${level}`;
@@ -276,10 +1168,12 @@
 				if (a.level === b.level) {
 					removeKittenById(a.id);
 					removeKittenById(b.id);
-					const newK = createKitten(a.level+1, true);
+					const newK = createKitten(a.level+1, true, true);
 					newK.el.classList.add('combine');
 					setTimeout(()=> newK.el.classList.remove('combine'), 260);
 					addExperience(newK.level);
+					// 显示成就
+					showAchievement(a.level+1);
 				}
 			});
 			if (animate) {
@@ -291,7 +1185,10 @@
 			kittens.push(k);
 			updateCounts();
 			if (autoMergeEnabled) tryMerge(level);
-			if (animate) playMeowSound();
+			// 如果是合成产生的，显示成就
+			if (isMerge) {
+				showAchievement(level);
+			}
 			return k;
 		}
 
@@ -318,7 +1215,7 @@
 						const b = arr.pop();
 						removeKittenById(a.id);
 						removeKittenById(b.id);
-								const newK = createKitten(lv+1, false);
+						const newK = createKitten(lv+1, false, true);
 						newK.el.classList.add('combine');
 						setTimeout(()=> newK.el.classList.remove('combine'), 260);
 						addExperience(newK.level);
@@ -345,6 +1242,8 @@
 			coins -= totalCost;
 			updateCoinUI();
 			for (const lvl of kittensToCreate) createKitten(lvl, true);
+			// 播放喵声
+			playMeowSound();
 			refreshSpawnPreview();
 		});
 
@@ -367,6 +1266,13 @@
 			if (e.code==='Space') { e.preventDefault(); spawnBtn.click(); }
 		});
 
+		// 移动端触摸生成小猫（点击空白处也可生成）
+		board.addEventListener('touchend', (e)=>{
+			if (!e.target.closest('.kitten')) {
+				spawnBtn.click();
+			}
+		});
+
 		// coin production: each n级小猫每分钟产生 (n+1)^2 个金币
 		function calculateProduction() {
 			prodPerMinute = kittens.reduce((s,k)=> s + (k.level+1)*(k.level+1), 0);
@@ -379,8 +1285,11 @@
 			const now = Date.now();
 			const dt = (now - lastTick)/1000; lastTick = now;
 			const perSec = prodPerMinute/60;
-			coins += perSec * dt;
+			const earned = perSec * dt;
+			coins += earned;
+			totalCoinsEarned += earned;
 			updateCoinUI();
+			checkCoinMilestones();
 		}, 1000);
 
 		// update production when kittens change
@@ -391,15 +1300,18 @@
 		}
 		updateCounts = wrappedUpdateCounts;
 
-		autoMergeCheckbox.addEventListener('change',(e)=>{ autoMergeEnabled = e.target.checked; if (autoMergeEnabled) tryMerge(); });
+		autoMergeCheckbox.addEventListener('change',(e)=>{ 
+			autoMergeEnabled = e.target.checked; 
+			if (autoMergeEnabled) tryMerge(); 
+		});
+
+		achievementsBtn.addEventListener('click', openAchievements);
+		shopBtn.addEventListener('click', openShop);
 
 		updateCounts();
 		updatePlayerUI();
 		updateCoinUI();
-
-		updateCounts();
-		updatePlayerUI();
+		updateInventoryUI();
 	</script>
 </body>
 </html>
-
