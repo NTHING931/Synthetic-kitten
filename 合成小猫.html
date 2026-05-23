@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+	<title>合成小猫</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			touch-action: manipulation; /* 优化移动端触控 */
+		}
+		body {
+			font-family: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+			background: #f7f7fb; 
+			color:#222; 
+			display:flex; 
+			flex-direction:column; 
+			align-items:center; 
+			padding: 12px;
+			min-height: 100vh;
+		}
+		header {
+			text-align:center;
+			margin-bottom: 16px;
+			width: 100%;
+		}
+		header h1 {
+			font-size: 24px;
+			margin-bottom: 8px;
+		}
+		header p {
+			font-size: 14px;
+			color: #666;
+		}
+		#controls {
+			margin: 12px 0;
+			width: 100%;
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 8px;
+		}
+		button#spawn {
+			padding: 14px 24px;
+			font-size: 16px;
+			cursor: pointer;
+			border-radius: 8px;
+			background:linear-gradient(#ffd, #ffb); 
+			border:1px solid #e5a;
+			flex: 1;
+			min-width: 120px;
+		}
+		#spawn-cost {
+			font-size: 12px; 
+			color:#666;
+			white-space: nowrap;
+		}
+		#auto-merge-wrapper {
+			display: flex;
+			align-items: center;
+			font-size: 14px;
+			margin: 4px 0;
+		}
+		#auto-merge {
+			margin-right: 6px;
+		}
+		#player {
+			width: 100%;
+			margin: 8px 0;
+		}
+		#player > div:first-child {
+			font-size: 14px;
+			margin-bottom: 6px;
+		}
+		#player-exp-bar-container {
+			width: 100%; 
+			background:#eee; 
+			border-radius: 999px; 
+			height: 10px; 
+			overflow:hidden;
+		}
+		#player-exp-bar {
+			height:100%; 
+			width:0%; 
+			background:linear-gradient(90deg,#ffd27a,#ffb86b);
+		}
+		#player-exp-text {
+			font-size: 12px;
+			color:#666;
+			margin-top: 4px;
+		}
+		#coins-panel {
+			width: 100%;
+			margin: 4px 0;
+		}
+		#coins-panel > div:first-child {
+			font-size: 14px;
+		}
+		#coins-panel > div:last-child {
+			font-size: 12px;
+			color:#666;
+		}
+		#board {
+			width: 100%;
+			min-height: 200px;
+			display:grid; 
+			grid-template-columns: repeat(auto-fill, minmax(70px,1fr)); 
+			gap: 8px; 
+			padding: 12px; 
+			background:white; 
+			border-radius: 12px; 
+			box-shadow:0 4px 12px rgba(20,20,40,0.06);
+			margin-bottom: 16px;
+			overflow-y: auto;
+			max-height: calc(100vh - 320px);
+		}
+		.kitten {
+			background:linear-gradient(white, #fff7); 
+			border-radius: 10px; 
+			padding: 8px; 
+			display:flex; 
+			flex-direction:column; 
+			align-items:center; 
+			justify-content:center; 
+			font-size: 24px; 
+			user-select:none; 
+			transition: transform .18s ease, box-shadow .18s ease; 
+			position:relative;
+			min-height: 70px;
+			touch-action: none; /* 禁用默认触控行为，优化拖拽 */
+		}
+		.kitten .coin-badge {
+			position:absolute; 
+			right:4px; 
+			top:4px; 
+			background:rgba(255,255,255,0.9); 
+			padding:2px 4px; 
+			border-radius:8px; 
+			font-size: 10px; 
+			color:#b05; 
+			box-shadow:0 2px 6px rgba(0,0,0,0.06);
+		}
+		.kitten .level {
+			font-size: 11px;
+			color:#666;
+			margin-top: 4px;
+		}
+		.kitten.l0 {background: linear-gradient(#fff, #f8f8ff);} 
+		.kitten.l1 {background: linear-gradient(#fff6e6,#fff0d9);} 
+		.kitten.l2 {background: linear-gradient(#e9f7ff,#dbf2ff);} 
+		.kitten.l3 {background: linear-gradient(#f3e9ff,#eee0ff);} 
+		.kitten.l4 {background: linear-gradient(#e6ffe6,#d9ffd9);} 
+		.kitten.combine {transform:scale(1.08); box-shadow:0 6px 18px rgba(0,0,0,0.12);} 
+		.kitten.dragging {opacity:0.6; transform:scale(0.98);} 
+		.footer {margin-top:12px;color:#666;}
+		.stats {
+			display:flex; 
+			gap: 6px; 
+			flex-wrap:wrap; 
+			justify-content:center; 
+			margin-top: 8px;
+			width: 100%;
+		}
+		.badge {
+			background:#fff; 
+			padding:4px 8px; 
+			border-radius:999px; 
+			box-shadow:0 2px 6px rgba(0,0,0,0.04);
+			font-size: 12px;
+		} 
+		#start-screen {
+			position:fixed; 
+			inset:0; 
+			display:flex; 
+			align-items:center; 
+			justify-content:center; 
+			background:linear-gradient(rgba(10,10,20,0.35), rgba(10,10,20,0.35)); 
+			z-index:60;
+			padding: 20px;
+		}
+		#start-screen .start-card {
+			background:white; 
+			padding: 24px; 
+			border-radius:12px; 
+			box-shadow:0 8px 30px rgba(20,20,40,0.12); 
+			text-align:center;
+			width: 100%;
+			max-width: 320px;
+		}
+		#start-screen h2 {
+			font-size: 20px;
+			margin-bottom: 16px;
+		}
+		#start-coins {
+			width:80px;
+			padding:6px;
+			border-radius:6px;
+			border:1px solid #ddd;
+			text-align: center;
+		}
+		#start-btn {
+			padding:12px 20px;
+			border-radius:8px;
+			font-size:16px;
+			cursor:pointer;
+			background: #ffd27a;
+			border: none;
+			margin: 12px 0;
+			width: 100%;
+		}
+		#game-root {
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div id="start-screen">
+		<div class="start-card">
+			<h2>合成小猫 — 点击开始</h2>
+			<div style="margin:8px 0">初始金币: <input id="start-coins" type="number" min="0" value="50"></div>
+			<button id="start-btn">开始游戏</button>
+			<div style="font-size:12px;color:#666;margin-top:8px">按空格/点击生成小猫，拖拽或自动合成。</div>
+		</div>
+	</div>
+
+	<div id="game-root" style="display:none">
+	<header>
+		<h1>合成小猫</h1>
+		<p>点击「生成小猫」，每两个同等级小猫会自动合成成更高级小猫。</p>
+	</header>
+	<div id="controls">
+		<button id="spawn">生成小猫</button>
+		<div id="spawn-cost">本次生成费用: 0</div>
+		<div id="auto-merge-wrapper">
+			<input type="checkbox" id="auto-merge" checked> 
+			<label for="auto-merge">自动合成</label>
+		</div>
+		<div id="player">
+			<div>玩家 等级 <span id="player-level">1</span></div>
+			<div id="player-exp-bar-container">
+				<div id="player-exp-bar"></div>
+			</div>
+			<div id="player-exp-text">经验: <span id="player-exp">0</span>/<span id="player-exp-next">15</span></div>
+		</div>
+		<div id="coins-panel">
+			<div>金币: <span id="coins">50</span></div>
+			<div>产出: <span id="prod-per-minute">0</span>/min （<span id="prod-per-second">0</span>/s）</div>
+		</div>
+	</div>
+	<div id="board" aria-live="polite"></div>
+	<div class="stats" id="counts"></div>
+	</div>
+
+	<script>
+		const spawnBtn = document.getElementById('spawn');
+		const board = document.getElementById('board');
+		const autoMergeCheckbox = document.getElementById('auto-merge');
+		const spawnCostEl = document.getElementById('spawn-cost');
+		const coinsEl = document.getElementById('coins');
+		const prodPerMinEl = document.getElementById('prod-per-minute');
+		const prodPerSecEl = document.getElementById('prod-per-second');
+		const countsEl = document.getElementById('counts');
+
+		let idCounter = 0;
+		const kittens = []; // {id, level, el}
+
+		const player = { level: 1, exp: 0 };
+		let coins = 50; // 初始金币
+		let autoMergeEnabled = true;
+		let prodPerMinute = 0;
+		let nextSpawnPreview = null;
+		let audioCtx = null;
+
+		function getAudioContext() {
+			if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+			if (audioCtx.state === 'suspended') audioCtx.resume();
+			return audioCtx;
+		}
+
+		function playMergeSound() {
+			const ctx = getAudioContext();
+			if (!ctx) return;
+			const osc = ctx.createOscillator();
+			const gain = ctx.createGain();
+			osc.type = 'triangle';
+			osc.frequency.setValueAtTime(520, ctx.currentTime);
+			gain.gain.setValueAtTime(0.15, ctx.currentTime);
+			gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+			osc.connect(gain);
+			gain.connect(ctx.destination);
+			osc.start();
+			osc.stop(ctx.currentTime + 0.18);
+		}
+
+		function playUpgradeSound() {
+			const ctx = getAudioContext();
+			if (!ctx) return;
+			const osc = ctx.createOscillator();
+			const gain = ctx.createGain();
+			osc.type = 'sine';
+			osc.frequency.setValueAtTime(640, ctx.currentTime);
+			osc.frequency.exponentialRampToValueAtTime(920, ctx.currentTime + 0.24);
+			gain.gain.setValueAtTime(0.2, ctx.currentTime);
+			gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.24);
+			osc.connect(gain);
+			gain.connect(ctx.destination);
+			osc.start();
+			osc.stop(ctx.currentTime + 0.24);
+		}
+
+		function getSpawnPreview() {
+			let count = 1;
+			if (player.level >= 4) {
+				const r = Math.random();
+				if (r < 0.1) count = 3;
+				else if (r < 0.4) count = 2;
+			} else if (player.level === 3) {
+				if (Math.random() < 0.25) count = 2;
+			} else if (player.level === 2) {
+				if (Math.random() < 0.15) count = 2;
+			}
+			const levels = [];
+			for (let i = 0; i < count; i++) {
+				let toLevel = 0;
+				if (player.level > 2) {
+					const chance = Math.min(0.15 * (player.level - 1), 0.6);
+					if (Math.random() < chance) {
+						const maxL = player.level;
+						const minL = 2;
+						toLevel = Math.floor(Math.random() * (maxL - minL + 1)) + minL;
+					}
+				}
+				levels.push(toLevel);
+			}
+			const totalCost = levels.reduce((s,l)=> s + (l === 0 ? 1 : l*l), 0);
+			return { count, levels, totalCost };
+		}
+
+		function expNeededForNext(level) {
+			return 15 * level; // 当前等级升下一级所需经验，例如 1->2 需15，2->3 需30
+		}
+
+		function updatePlayerUI() {
+			document.getElementById('player-level').textContent = player.level;
+			const need = expNeededForNext(player.level);
+			document.getElementById('player-exp').textContent = player.exp;
+			document.getElementById('player-exp-next').textContent = need;
+			const pct = need > 0 ? Math.min(100, Math.round((player.exp / need) * 100)) : 0;
+			document.getElementById('player-exp-bar').style.width = pct + '%';
+		}
+
+		function updateCoinUI() {
+			coinsEl.textContent = Math.floor(coins);
+			prodPerMinEl.textContent = prodPerMinute;
+			prodPerSecEl.textContent = (prodPerMinute/60).toFixed(2);
+			updateSpawnButton();
+		}
+
+		function updateSpawnButton() {
+			if (!nextSpawnPreview) refreshSpawnPreview();
+			const cost = nextSpawnPreview.totalCost;
+			spawnCostEl.textContent = `本次生成费用: ${cost}`;
+			spawnBtn.disabled = coins < cost;
+		}
+
+		function refreshSpawnPreview() {
+			nextSpawnPreview = getSpawnPreview();
+			updateSpawnButton();
+		}
+
+		// start screen handling
+		const startBtn = document.getElementById('start-btn');
+		const startCoinsInput = document.getElementById('start-coins');
+		const gameRoot = document.getElementById('game-root');
+		const startScreen = document.getElementById('start-screen');
+		startBtn.addEventListener('click', ()=>{
+			const v = Number(startCoinsInput.value);
+			coins = (isNaN(v) || v < 0) ? 50 : v;
+			// show game
+			startScreen.style.display = 'none';
+			gameRoot.style.display = 'block';
+			getAudioContext();
+			refreshSpawnPreview();
+			updateCoinUI();
+		});
+
+		function addExperience(points) {
+			if (!points) return;
+			player.exp += points;
+			// 升级可能会有多级连升
+			while (player.exp >= expNeededForNext(player.level)) {
+				player.exp -= expNeededForNext(player.level);
+				player.level += 1;
+				// 简单提示效果：闪烁一次所有已存在小猫
+				board.querySelectorAll('.kitten').forEach(el=>{ el.classList.add('combine'); setTimeout(()=>el.classList.remove('combine'),300); });
+				playUpgradeSound();
+				refreshSpawnPreview();
+			}
+			updatePlayerUI();
+		}
+
+		function updateCounts() {
+			const map = {};
+			kittens.forEach(k => map[k.level] = (map[k.level]||0)+1);
+			countsEl.innerHTML = '';
+			const entries = Object.keys(map).sort((a,b)=>a-b);
+			if (!entries.length) {
+				countsEl.innerHTML = '<div class="badge">暂无小猫</div>';
+				return;
+			}
+			entries.forEach(l=>{
+				const d = document.createElement('div');
+				d.className='badge';
+				d.textContent = `等级 ${l}: ${map[l]} 只`;
+				countsEl.appendChild(d);
+			});
+		}
+
+		function createKitten(level=0, animate=true) {
+			const id = ++idCounter;
+			const el = document.createElement('div');
+			el.className = `kitten l${level}`;
+			el.dataset.id = id;
+			el.dataset.level = level;
+			const prod = (level+1)*(level+1);
+			el.innerHTML = `<div class="face">🐱</div><div class="level">Lv.${level}</div><div class="coin-badge">+${prod}/min</div>`;
+			// enable drag to manually merge
+			el.draggable = true;
+			el.addEventListener('dragstart', (ev)=>{
+				ev.dataTransfer.setData('text/plain', String(id));
+				ev.dataTransfer.effectAllowed = 'move';
+				el.classList.add('dragging');
+			});
+			el.addEventListener('dragend', ()=> el.classList.remove('dragging'));
+			el.addEventListener('dragover', (ev)=> ev.preventDefault());
+			el.addEventListener('drop', (ev)=>{
+				ev.preventDefault();
+				const draggedId = Number(ev.dataTransfer.getData('text/plain'));
+				const targetId = Number(el.dataset.id);
+				if (!draggedId || draggedId === targetId) return;
+				const a = kittens.find(k=>k.id===draggedId);
+				const b = kittens.find(k=>k.id===targetId);
+				if (!a || !b) return;
+				if (a.level === b.level) {
+					removeKittenById(a.id);
+					removeKittenById(b.id);
+					const newK = createKitten(a.level+1, true);
+					newK.el.classList.add('combine');
+					setTimeout(()=> newK.el.classList.remove('combine'), 260);
+					addExperience(newK.level);
+				}
+			});
+			if (animate) {
+				requestAnimationFrame(()=> el.classList.add('combine'));
+				setTimeout(()=> el.classList.remove('combine'),220);
+			}
+			board.appendChild(el);
+			const k = {id, level, el};
+			kittens.push(k);
+			updateCounts();
+			if (autoMergeEnabled) tryMerge(level);
+			return k;
+		}
+
+		function removeKittenById(id) {
+			const idx = kittens.findIndex(k=>k.id==id);
+			if (idx===-1) return false;
+			const k = kittens[idx];
+			k.el.remove();
+			kittens.splice(idx,1);
+			return true;
+		}
+
+		function tryMerge(level) {
+			let didMerge = false;
+			do {
+				didMerge = false;
+				const groups = {};
+				kittens.forEach(k=>{ groups[k.level] = groups[k.level] || []; groups[k.level].push(k); });
+				const lvls = Object.keys(groups).map(Number).sort((a,b)=>a-b);
+				for (const lv of lvls) {
+					const arr = groups[lv];
+					while (arr.length >= 2) {
+						const a = arr.pop();
+						const b = arr.pop();
+						removeKittenById(a.id);
+						removeKittenById(b.id);
+						const newK = createKitten(lv+1, false);
+						newK.el.classList.add('combine');
+						setTimeout(()=> newK.el.classList.remove('combine'), 260);
+						addExperience(newK.level);
+						playMergeSound();
+						didMerge = true;
+						groups[lv+1] = groups[lv+1] || [];
+						groups[lv+1].push(newK);
+					}
+					if (didMerge) break;
+				}
+			} while (didMerge);
+			updateCounts();
+		}
+
+		spawnBtn.addEventListener('click', ()=> {
+			if (!nextSpawnPreview) refreshSpawnPreview();
+			const kittensToCreate = nextSpawnPreview.levels.slice();
+			const totalCost = nextSpawnPreview.totalCost;
+			if (coins < totalCost) {
+				spawnBtn.classList.add('combine');
+				setTimeout(()=>spawnBtn.classList.remove('combine'),180);
+				return;
+			}
+			coins -= totalCost;
+			updateCoinUI();
+			for (const lvl of kittensToCreate) createKitten(lvl, true);
+			refreshSpawnPreview();
+		});
+
+		board.addEventListener('click', (e)=>{
+			const kEl = e.target.closest('.kitten');
+			if (!kEl) return;
+			const id = Number(kEl.dataset.id);
+			const k = kittens.find(x=>x.id===id);
+			if (!k) return;
+			if (e.ctrlKey || e.metaKey) {
+				removeKittenById(id);
+				updateCounts();
+			} else {
+				k.el.classList.add('combine');
+				setTimeout(()=>k.el.classList.remove('combine'),180);
+			}
+		});
+
+		window.addEventListener('keydown',(e)=> {
+			if (e.code==='Space') { e.preventDefault(); spawnBtn.click(); }
+		});
+
+		// 移动端触摸生成小猫（点击空白处也可生成）
+		board.addEventListener('touchend', (e)=>{
+			if (!e.target.closest('.kitten')) {
+				spawnBtn.click();
+			}
+		});
+
+		// coin production: each n级小猫每分钟产生 (n+1)^2 个金币
+		function calculateProduction() {
+			prodPerMinute = kittens.reduce((s,k)=> s + (k.level+1)*(k.level+1), 0);
+			updateCoinUI();
+		}
+
+		// tick every second, add fractional coins
+		let lastTick = Date.now();
+		setInterval(()=>{
+			const now = Date.now();
+			const dt = (now - lastTick)/1000; lastTick = now;
+			const perSec = prodPerMinute/60;
+			coins += perSec * dt;
+			updateCoinUI();
+		}, 1000);
+
+		// update production when kittens change
+		const originalUpdateCounts = updateCounts;
+		function wrappedUpdateCounts(){
+			originalUpdateCounts();
+			calculateProduction();
+		}
+		updateCounts = wrappedUpdateCounts;
+
+		autoMergeCheckbox.addEventListener('change',(e)=>{ 
+			autoMergeEnabled = e.target.checked; 
+			if (autoMergeEnabled) tryMerge(); 
+		});
+
+		updateCounts();
+		updatePlayerUI();
+		updateCoinUI();
+	</script>
+</body>
+</html>
