@@ -1147,6 +1147,273 @@
 			transform: scale(1.1);
 			box-shadow: 0 6px 20px rgba(52, 199, 89, 0.6);
 		}
+		
+		/* 金币不足弹窗 */
+		#insufficient-gold-popup {
+			position: fixed;
+			top: 40%;
+			left: 50%;
+			transform: translate(-50%, -50%) scale(0.8);
+			background: white;
+			border-radius: 20px;
+			padding: 24px 32px;
+			box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+			z-index: 500;
+			display: none;
+			text-align: center;
+			animation: popupFadeIn 0.3s ease forwards;
+		}
+		
+		#insufficient-gold-popup.show {
+			display: block;
+		}
+		
+		@keyframes popupFadeIn {
+			from {
+				opacity: 0;
+				transform: translate(-50%, -50%) scale(0.8);
+			}
+			to {
+				opacity: 1;
+				transform: translate(-50%, -50%) scale(1);
+			}
+		}
+		
+		#insufficient-gold-popup .popup-icon {
+			font-size: 48px;
+			margin-bottom: 12px;
+		}
+		
+		#insufficient-gold-popup .popup-message {
+			font-size: 16px;
+			color: #333;
+			font-weight: 600;
+			margin-bottom: 8px;
+		}
+		
+		#insufficient-gold-popup .popup-detail {
+			font-size: 14px;
+			color: #666;
+			margin-bottom: 16px;
+		}
+		
+		#insufficient-gold-popup .popup-close {
+			background: linear-gradient(135deg, #764ba2, #667eea);
+			color: white;
+			border: none;
+			padding: 10px 24px;
+			border-radius: 20px;
+			font-size: 14px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 12px rgba(118, 75, 162, 0.4);
+		}
+		
+		#insufficient-gold-popup .popup-close:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 16px rgba(118, 75, 162, 0.5);
+		}
+		
+		/* 道具不足弹窗 - 显示在道具栏上方 */
+		#inventory-popup {
+			position: fixed;
+			bottom: 110px;
+			left: 24px;
+			background: white;
+			border-radius: 16px;
+			padding: 16px 24px;
+			box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+			z-index: 1000;
+			display: none;
+			text-align: center;
+			animation: inventoryPopupFadeIn 0.3s ease forwards;
+			min-width: 200px;
+		}
+		
+		#inventory-popup.show {
+			display: block;
+		}
+		
+		@keyframes inventoryPopupFadeIn {
+			from {
+				opacity: 0;
+				transform: translateY(20px) scale(0.9);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0) scale(1);
+			}
+		}
+		
+		#inventory-popup .popup-icon {
+			font-size: 36px;
+			margin-bottom: 8px;
+		}
+		
+		#inventory-popup .popup-message {
+			font-size: 15px;
+			color: #333;
+			font-weight: 600;
+		}
+		
+		#inventory-popup .popup-close {
+			background: linear-gradient(135deg, #764ba2, #667eea);
+			color: white;
+			border: none;
+			padding: 8px 20px;
+			border-radius: 16px;
+			font-size: 13px;
+			font-weight: bold;
+			cursor: pointer;
+			margin-top: 12px;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 10px rgba(118, 75, 162, 0.4);
+		}
+		
+		#inventory-popup .popup-close:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 14px rgba(118, 75, 162, 0.5);
+		}
+		
+		/* 背包容量显示 */
+		#inventory-size {
+			font-size: 14px;
+			color: #666;
+			margin-top: 8px;
+		}
+		
+		/* 背包已满弹窗 */
+		#inventory-full-popup {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%) scale(0.8);
+			background: white;
+			border-radius: 20px;
+			padding: 24px 32px;
+			box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+			z-index: 500;
+			display: none;
+			text-align: center;
+			animation: popupFadeIn 0.3s ease forwards;
+		}
+		#inventory-full-popup.show { display: block; }
+		
+		#inventory-full-popup .popup-icon {
+			font-size: 48px;
+			margin-bottom: 12px;
+		}
+		
+		#inventory-full-popup .popup-message {
+			font-size: 18px;
+			color: #333;
+			font-weight: bold;
+			margin-bottom: 8px;
+		}
+		
+		#inventory-full-popup .popup-detail {
+			font-size: 14px;
+			color: #666;
+			margin-bottom: 16px;
+		}
+		
+		#inventory-full-popup .popup-close {
+			background: linear-gradient(135deg, #764ba2, #667eea);
+			color: white;
+			border: none;
+			padding: 10px 24px;
+			border-radius: 20px;
+			font-size: 14px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 12px rgba(118, 75, 162, 0.4);
+		}
+		
+		#inventory-full-popup .popup-close:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 16px rgba(118, 75, 162, 0.5);
+		}
+		
+		/* 小鱼干全屏火热效果 */
+		#hot-overlay {
+			position: fixed;
+			inset: 0;
+			pointer-events: none;
+			z-index: 9999;
+			display: none;
+			animation: hotPulse 0.8s ease-in-out infinite;
+		}
+		
+		#hot-overlay.active {
+			display: block;
+		}
+		
+		#hot-overlay::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: radial-gradient(circle, rgba(255, 69, 0, 0.15) 0%, rgba(255, 100, 0, 0.1) 50%, transparent 70%);
+			animation: hotGlow 1.2s ease-in-out infinite alternate;
+		}
+		
+		#hot-overlay::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			border: 8px solid transparent;
+			border-radius: 0;
+			animation: hotBorderPulse 0.6s ease-in-out infinite;
+		}
+		
+		@keyframes hotPulse {
+			0%, 100% { opacity: 0.8; }
+			50% { opacity: 1; }
+		}
+		
+		@keyframes hotGlow {
+			0% { background: radial-gradient(circle, rgba(255, 69, 0, 0.12) 0%, rgba(255, 100, 0, 0.08) 50%, transparent 70%); }
+			100% { background: radial-gradient(circle, rgba(255, 140, 0, 0.2) 0%, rgba(255, 69, 0, 0.12) 50%, transparent 70%); }
+		}
+		
+		@keyframes hotBorderPulse {
+			0%, 100% { border-color: rgba(255, 69, 0, 0.6); box-shadow: inset 0 0 30px rgba(255, 69, 0, 0.3), 0 0 40px rgba(255, 69, 0, 0.4); }
+			50% { border-color: rgba(255, 140, 0, 0.9); box-shadow: inset 0 0 50px rgba(255, 100, 0, 0.5), 0 0 60px rgba(255, 69, 0, 0.6); }
+		}
+		
+		/* 保留旧的边框效果作为备选 */
+		#board.hot-active {
+			border: 4px solid #ff4500;
+			box-shadow: 0 0 20px rgba(255, 69, 0, 0.6);
+		}
+		
+		/* 更好的合成动画 */
+		.kitten.combine {
+			animation: combinePulse 0.26s ease-in-out;
+		}
+		
+		@keyframes combinePulse {
+			0% { transform: scale(1); }
+			50% { transform: scale(1.2); }
+			100% { transform: scale(1); }
+		}
+		
+		/* 道具剩余时间显示 */
+		.inventory-item .timer-display {
+			position: absolute;
+			top: -10px;
+			right: -10px;
+			background: #ff4500;
+			color: white;
+			font-size: 11px;
+			font-weight: bold;
+			padding: 2px 6px;
+			border-radius: 10px;
+			min-width: 30px;
+			text-align: center;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+		}
 	</style>
 </head>
 <body>
@@ -1181,6 +1448,7 @@
 		<div id="coins-panel">
 			<div>好感值: <span id="coins">50</span></div>
 			<div>产出: <span id="prod-per-minute">0</span>/min （<span id="prod-per-second">0</span>/s）</div>
+			<div id="inventory-size">背包: <span id="current-inventory">0</span>/<span id="max-inventory">17</span></div>
 		</div>
 		<div id="gems-display">💰 金币: <span id="gems">0</span></div>
 		<div id="menu-buttons">
@@ -1202,15 +1470,27 @@
 		</div>
 	</div>
 
+	<!-- 道具不足弹窗 -->
+	<div id="inventory-popup">
+		<div class="popup-icon" id="inventory-popup-icon">😿</div>
+		<div class="popup-message" id="inventory-popup-message">道具数量不足</div>
+		<button class="popup-close" onclick="closeInventoryPopup()">确定</button>
+	</div>
+
+	<!-- 全屏火热效果覆盖层 -->
+	<div id="hot-overlay"></div>
+
 	<!-- 左下角物品栏 -->
 	<div id="inventory-panel">
 		<div class="inventory-item" id="fish-item" onclick="useFish()">
 			🐟
 			<div class="item-count" id="fish-count">0</div>
+			<div class="timer-display" id="fish-timer" style="display:none;">0s</div>
 		</div>
 		<div class="inventory-item" id="arm-item" onclick="useArm()">
 			🦾
 			<div class="item-count" id="arm-count">0</div>
+			<div class="timer-display" id="arm-timer" style="display:none;">0s</div>
 		</div>
 	</div>
 
@@ -1292,6 +1572,22 @@
 		</div>
 	</div>
 
+	<!-- 金币不足弹窗 -->
+	<div id="insufficient-gold-popup">
+		<div class="popup-icon">😿</div>
+		<div class="popup-message" id="popup-message">金币不足</div>
+		<div class="popup-detail" id="popup-detail">当前金币: 0，需要: 0</div>
+		<button class="popup-close" onclick="closeInsufficientGoldPopup()">确定</button>
+	</div>
+
+	<!-- 背包已满弹窗 -->
+	<div id="inventory-full-popup">
+		<div class="popup-icon">📦</div>
+		<div class="popup-message">背包已满</div>
+		<div class="popup-detail" id="inventory-full-detail">当前: 0/17，需要空间才能继续生成小猫</div>
+		<button class="popup-close" onclick="closeInventoryFullPopup()">确定</button>
+	</div>
+
 	<!-- 商店面板 -->
 	<div id="shop-panel">
 		<div id="shop-content">
@@ -1307,17 +1603,25 @@
 					<div class="item-icon">🐟</div>
 					<div class="item-info">
 						<div class="item-name">小鱼干</div>
-						<div class="item-desc">使用后加快小猫生产速度5倍，持续30秒</div>
+						<div class="item-desc">使用后加快小猫生产速度5倍，持续5分钟</div>
 					</div>
-					<button class="item-buy" onclick="buyItem('fish')">💰 100</button>
+					<button class="item-buy" onclick="buyItem('fish')">💰 30</button>
 				</div>
 				<div class="shop-item">
 					<div class="item-icon">🦾</div>
 					<div class="item-info">
 						<div class="item-name">机械臂</div>
-						<div class="item-desc">自动合成相邻的相同等级小猫</div>
+						<div class="item-desc">自动合成相邻的相同等级小猫，持续3分钟</div>
 					</div>
-					<button class="item-buy" onclick="buyItem('arm')">💰 200</button>
+					<button class="item-buy" onclick="buyItem('arm')">💰 45</button>
+				</div>
+				<div class="shop-item">
+					<div class="item-icon">🎒</div>
+					<div class="item-info">
+						<div class="item-name">背包扩展</div>
+						<div class="item-desc">增加17个背包格容量</div>
+					</div>
+					<button class="item-buy" onclick="buyItem('backpack')">💰 500</button>
 				</div>
 			</div>
 		</div>
@@ -1344,6 +1648,10 @@
 		const shopPanel = document.getElementById('shop-panel');
 		const shopGold = document.getElementById('shop-gold');
 		const gemsEl = document.getElementById('gems');
+		const currentInventoryEl = document.getElementById('current-inventory');
+		const maxInventoryEl = document.getElementById('max-inventory');
+		const fishTimerEl = document.getElementById('fish-timer');
+		const armTimerEl = document.getElementById('arm-timer');
 
 		let idCounter = 0;
 		const kittens = []; // {id, level, el}
@@ -1368,6 +1676,13 @@
 		let fishActive = false; // 小鱼干是否激活
 		let armActive = false; // 机械臂是否激活
 		let autoSpawnInterval = null; // 自动点击定时器
+		
+		// 背包系统
+		let maxInventorySize = 17; // 初始背包容量
+		let fishTimerId = null; // 小鱼干定时器ID
+		let armTimerId = null; // 机械臂定时器ID
+		let fishRemainingTime = 0; // 小鱼干剩余时间（秒）
+		let armRemainingTime = 0; // 机械臂剩余时间（秒）
 
 		function getAudioContext() {
 			if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1638,14 +1953,16 @@
 		// 购买物品（使用金币）
 		function buyItem(itemId) {
 			const items = {
-				fish: { cost: 100, name: '小鱼干' },
-				arm: { cost: 200, name: '机械臂' }
+				fish: { cost: 30, name: '小鱼干' },
+				arm: { cost: 45, name: '机械臂' },
+				backpack: { cost: 500, name: '背包扩展' }
 			};
 			
 			const item = items[itemId];
 			if (!item) return;
 			
 			if (gems < item.cost) {
+				showInsufficientGoldPopup(item.name, item.cost);
 				return;
 			}
 			
@@ -1658,7 +1975,33 @@
 			} else if (itemId === 'arm') {
 				armCount++;
 				updateInventoryUI();
+			} else if (itemId === 'backpack') {
+				maxInventorySize += 17;
+				maxInventoryEl.textContent = maxInventorySize;
 			}
+		}
+		
+		// 显示金币不足弹窗（3秒后自动关闭）
+		function showInsufficientGoldPopup(itemName, cost) {
+			const popup = document.getElementById('insufficient-gold-popup');
+			const messageEl = document.getElementById('popup-message');
+			const detailEl = document.getElementById('popup-detail');
+			
+			messageEl.textContent = `金币不足`;
+			detailEl.textContent = `当前金币: ${Math.floor(gems)}，需要: ${cost}`;
+			
+			popup.classList.add('show');
+			
+			// 3秒后自动关闭
+			setTimeout(() => {
+				popup.classList.remove('show');
+			}, 3000);
+		}
+		
+		// 关闭金币不足弹窗
+		function closeInsufficientGoldPopup() {
+			const popup = document.getElementById('insufficient-gold-popup');
+			popup.classList.remove('show');
 		}
 
 		// 更新物品栏UI
@@ -1697,10 +2040,10 @@
 			}
 		}
 
-		// 使用小鱼干 - 加速好感值生产10秒
+		// 使用小鱼干 - 加速好感值生产5分钟
 		function useFish() {
 			if (fishCount <= 0) {
-				alert('小鱼干数量不足！');
+				showInventoryPopup('🐟', '小鱼干数量不足！');
 				return;
 			}
 			
@@ -1708,22 +2051,49 @@
 			fishActive = true;
 			updateInventoryUI();
 			
-			// 好感值生产速度加快5倍，持续10秒
+			// 好感值生产速度加快5倍，持续5分钟
 			prodPerMinute *= 5;
 			updateCoinUI();
 			
+			// 显示全屏火热效果
+			document.getElementById('hot-overlay').classList.add('active');
+			
+			// 设置剩余时间
+			fishRemainingTime = 300; // 5分钟
+			fishTimerEl.style.display = 'block';
+			
+			// 更新剩余时间显示
+			if (fishTimerId) clearInterval(fishTimerId);
+			fishTimerId = setInterval(() => {
+				fishRemainingTime--;
+				if (fishRemainingTime >= 60) {
+					const mins = Math.floor(fishRemainingTime / 60);
+					const secs = fishRemainingTime % 60;
+					fishTimerEl.textContent = `${mins}m${secs}s`;
+				} else {
+					fishTimerEl.textContent = `${fishRemainingTime}s`;
+				}
+				
+				if (fishRemainingTime <= 0) {
+					clearInterval(fishTimerId);
+					fishTimerId = null;
+				}
+			}, 1000);
+			
 			setTimeout(() => {
 				fishActive = false;
+				document.getElementById('hot-overlay').classList.remove('active');
+				fishTimerEl.style.display = 'none';
 				prodPerMinute = kittens.reduce((s,k)=> s + (k.level+1)*(k.level+1), 0);
 				updateCoinUI();
 				updateInventoryUI();
-			}, 10000);
+			}, 300000); // 5分钟 = 300秒
 		}
 
-		// 使用机械臂 - 自动点击生成小猫15秒
+		// 使用机械臂 - 自动点击生成小猫3分钟，加快点击速度
 		function useArm() {
 			if (armCount <= 0) {
-				alert('机械臂数量不足！');
+				showInventoryPopup('🦾', '机械臂数量不足！');
 				return;
 			}
 			
@@ -1731,20 +2101,84 @@
 			armActive = true;
 			updateInventoryUI();
 			
-			// 每秒自动点击生成小猫
+			// 每500毫秒自动点击生成小猫（加快速度）
 			autoSpawnInterval = setInterval(() => {
 				spawnBtn.click();
+			}, 500);
+			
+			// 设置剩余时间
+			armRemainingTime = 180; // 3分钟
+			armTimerEl.style.display = 'block';
+			
+			// 更新剩余时间显示
+			if (armTimerId) clearInterval(armTimerId);
+			armTimerId = setInterval(() => {
+				armRemainingTime--;
+				if (armRemainingTime >= 60) {
+					const mins = Math.floor(armRemainingTime / 60);
+					const secs = armRemainingTime % 60;
+					armTimerEl.textContent = `${mins}m${secs}s`;
+				} else {
+					armTimerEl.textContent = `${armRemainingTime}s`;
+				}
+				
+				if (armRemainingTime <= 0) {
+					clearInterval(armTimerId);
+					armTimerId = null;
+				}
 			}, 1000);
 			
-			// 15秒后停止
+			// 3分钟后停止
 			setTimeout(() => {
 				armActive = false;
+				armTimerEl.style.display = 'none';
 				if (autoSpawnInterval) {
 					clearInterval(autoSpawnInterval);
 					autoSpawnInterval = null;
 				}
 				updateInventoryUI();
-			}, 15000);
+			}, 180000); // 3分钟 = 180秒
+		}
+		
+		// 显示道具不足弹窗（3秒后自动关闭）
+		function showInventoryPopup(icon, message) {
+			const popup = document.getElementById('inventory-popup');
+			const iconEl = document.getElementById('inventory-popup-icon');
+			const messageEl = document.getElementById('inventory-popup-message');
+			
+			iconEl.textContent = icon;
+			messageEl.textContent = message;
+			
+			popup.classList.add('show');
+			
+			// 3秒后自动关闭
+			setTimeout(() => {
+				popup.classList.remove('show');
+			}, 3000);
+		}
+		
+		// 关闭道具不足弹窗
+		function closeInventoryPopup() {
+			const popup = document.getElementById('inventory-popup');
+			popup.classList.remove('show');
+		}
+
+		// 显示背包已满弹窗（3秒后自动关闭）
+		function showInventoryFullPopup() {
+			const popup = document.getElementById('inventory-full-popup');
+			const detailEl = document.getElementById('inventory-full-detail');
+			detailEl.textContent = `当前: ${kittens.length}/${maxInventorySize}，需要空间才能继续生成小猫`;
+			popup.classList.add('show');
+			// 3秒后自动关闭
+			setTimeout(() => {
+				popup.classList.remove('show');
+			}, 3000);
+		}
+
+		// 关闭背包已满弹窗
+		function closeInventoryFullPopup() {
+			const popup = document.getElementById('inventory-full-popup');
+			popup.classList.remove('show');
 		}
 
 		// 任务栏系统
@@ -2240,14 +2674,16 @@
 			const entries = Object.keys(map).sort((a,b)=>a-b);
 			if (!entries.length) {
 				countsEl.innerHTML = '<div class="badge">暂无小猫</div>';
-				return;
+			} else {
+				entries.forEach(l=>{
+					const d = document.createElement('div');
+					d.className='badge';
+					d.textContent = `等级 ${l}: ${map[l]} 只`;
+					countsEl.appendChild(d);
+				});
 			}
-			entries.forEach(l=>{
-				const d = document.createElement('div');
-				d.className='badge';
-				d.textContent = `等级 ${l}: ${map[l]} 只`;
-				countsEl.appendChild(d);
-			});
+			// 更新背包容量显示
+			currentInventoryEl.textContent = kittens.length;
 		}
 
 		function createKitten(level=0, animate=true, isMerge=false) {
@@ -2349,6 +2785,13 @@
 				setTimeout(()=>spawnBtn.classList.remove('combine'),180);
 				return;
 			}
+			
+			// 检查背包容量是否足够
+			if (kittens.length + kittensToCreate.length > maxInventorySize) {
+				showInventoryFullPopup();
+				return;
+			}
+			
 			coins -= totalCost;
 			updateCoinUI();
 			for (const lvl of kittensToCreate) createKitten(lvl, true);
