@@ -9,284 +9,350 @@
 			margin: 0;
 			padding: 0;
 			box-sizing: border-box;
-			touch-action: manipulation; /* 优化移动端触控 */
+			touch-action: manipulation;
 		}
 		body {
-			font-family: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
-			background: #f7f7fb; 
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 			color:#222; 
 			display:flex; 
 			flex-direction:column; 
 			align-items:center; 
-			padding: 12px;
+			padding: 20px;
 			min-height: 100vh;
 		}
 		header {
 			text-align:center;
-			margin-bottom: 16px;
+			margin-bottom: 20px;
 			width: 100%;
 		}
 		header h1 {
-			font-size: 24px;
+			font-size: 32px;
 			margin-bottom: 8px;
+			color: white;
+			text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+			font-weight: 700;
 		}
 		header p {
 			font-size: 14px;
-			color: #666;
+			color: rgba(255,255,255,0.9);
 		}
 		#controls {
-			margin: 12px 0;
+			margin: 16px 0;
 			width: 100%;
 			display: flex;
 			flex-wrap: wrap;
-			align-items: center;
-			gap: 8px;
+			align-items: stretch;
+			gap: 12px;
+			background: rgba(255,255,255,0.95);
+			padding: 20px;
+			border-radius: 16px;
+			box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 		}
 		button#spawn {
-			padding: 14px 24px;
-			font-size: 16px;
+			padding: 16px 32px;
+			font-size: 18px;
 			cursor: pointer;
-			border-radius: 8px;
-			background:linear-gradient(#ffd, #ffb); 
-			border:1px solid #e5a;
+			border-radius: 12px;
+			background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+			border: none;
 			flex: 1;
-			min-width: 120px;
+			min-width: 140px;
+			color: white;
+			font-weight: 600;
+			box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+			transition: all 0.3s ease;
+		}
+		button#spawn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 20px rgba(245, 87, 108, 0.5);
+		}
+		button#spawn:active {
+			transform: translateY(0);
 		}
 		#spawn-cost {
-			font-size: 12px; 
+			font-size: 13px; 
 			color:#666;
 			white-space: nowrap;
+			align-self: center;
 		}
 		#auto-merge-wrapper {
 			display: flex;
 			align-items: center;
 			font-size: 14px;
-			margin: 4px 0;
+			margin: 8px 0;
+			color: #666;
 		}
 		#auto-merge {
-			margin-right: 6px;
+			margin-right: 8px;
+			width: 18px;
+			height: 18px;
 		}
 		#player {
 			width: 100%;
-			margin: 8px 0;
+			margin: 12px 0;
 		}
 		#player > div:first-child {
-			font-size: 14px;
-			margin-bottom: 6px;
+			font-size: 15px;
+			margin-bottom: 8px;
+			color: #333;
+			font-weight: 600;
 		}
 		#player-exp-bar-container {
 			width: 100%; 
-			background:#eee; 
+			background: #e0e0e0; 
 			border-radius: 999px; 
-			height: 10px; 
+			height: 12px; 
 			overflow:hidden;
 		}
 		#player-exp-bar {
 			height:100%; 
 			width:0%; 
-			background:linear-gradient(90deg,#ffd27a,#ffb86b);
+			background: linear-gradient(90deg, #667eea, #764ba2);
+			transition: width 0.3s ease;
 		}
 		#player-exp-text {
-			font-size: 12px;
+			font-size: 13px;
 			color:#666;
-			margin-top: 4px;
+			margin-top: 6px;
 		}
 		#coins-panel {
 			width: 100%;
-			margin: 4px 0;
+			margin: 8px 0;
 		}
 		#coins-panel > div:first-child {
-			font-size: 14px;
+			font-size: 16px;
+			color: #333;
+			font-weight: 600;
 		}
-		#coins-panel > div:last-child {
-			font-size: 12px;
+		#coins-panel > div {
+			font-size: 14px;
 			color:#666;
+			margin-top: 4px;
+		}
+		#gems-display {
+			font-size: 16px;
+			color: #e74c3c;
+			font-weight: 600;
+			margin: 8px 0;
 		}
 		#board {
 			width: 100%;
-			min-height: 200px;
+			min-height: 240px;
 			display:grid; 
-			grid-template-columns: repeat(auto-fill, minmax(70px,1fr)); 
-			gap: 8px; 
-			padding: 12px; 
-			background:white; 
-			border-radius: 12px; 
-			box-shadow:0 4px 12px rgba(20,20,40,0.06);
-			margin-bottom: 16px;
+			grid-template-columns: repeat(auto-fill, minmax(80px,1fr)); 
+			gap: 12px; 
+			padding: 16px; 
+			background: rgba(255,255,255,0.95);
+			border-radius: 20px; 
+			box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+			margin-bottom: 20px;
 			overflow-y: auto;
-			max-height: calc(100vh - 320px);
+			max-height: calc(100vh - 400px);
 		}
 		.kitten {
-			background:linear-gradient(white, #fff7); 
-			border-radius: 10px; 
-			padding: 8px; 
+			background: linear-gradient(145deg, #ffffff, #f0f0f0);
+			border-radius: 16px; 
+			padding: 12px; 
 			display:flex; 
 			flex-direction:column; 
 			align-items:center; 
 			justify-content:center; 
-			font-size: 24px; 
+			font-size: 32px; 
 			user-select:none; 
-			transition: transform .18s ease, box-shadow .18s ease; 
+			transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
 			position:relative;
-			min-height: 70px;
-			touch-action: none; /* 禁用默认触控行为，优化拖拽 */
+			min-height: 80px;
+			touch-action: none;
+			box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+		}
+		.kitten:hover {
+			transform: translateY(-4px);
+			box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 		}
 		.kitten .coin-badge {
 			position:absolute; 
-			right:4px; 
-			top:4px; 
-			background:rgba(255,255,255,0.9); 
-			padding:2px 4px; 
-			border-radius:8px; 
-			font-size: 10px; 
-			color:#b05; 
-			box-shadow:0 2px 6px rgba(0,0,0,0.06);
+			right:6px; 
+			top:6px; 
+			background: linear-gradient(135deg, #ffd27a, #ffb86b);
+			padding:4px 8px; 
+			border-radius:12px; 
+			font-size: 11px; 
+			color:#8b4513; 
+			font-weight: 600;
+			box-shadow: 0 2px 8px rgba(255, 179, 107, 0.4);
+			content: "❤️";
 		}
 		.kitten .level {
-			font-size: 11px;
+			font-size: 13px;
 			color:#666;
-			margin-top: 4px;
+			margin-top: 6px;
+			font-weight: 500;
 		}
-		.kitten.l0 {background: linear-gradient(#fff, #f8f8ff);} 
-		.kitten.l1 {background: linear-gradient(#fff6e6,#fff0d9);} 
-		.kitten.l2 {background: linear-gradient(#e9f7ff,#dbf2ff);} 
-		.kitten.l3 {background: linear-gradient(#f3e9ff,#eee0ff);} 
-		.kitten.l4 {background: linear-gradient(#e6ffe6,#d9ffd9);} 
-		.kitten.combine {transform:scale(1.08); box-shadow:0 6px 18px rgba(0,0,0,0.12);} 
-		.kitten.dragging {opacity:0.6; transform:scale(0.98);} 
-		.footer {margin-top:12px;color:#666;}
+		.kitten.l0 {background: linear-gradient(145deg, #fff, #f8f8ff);} 
+		.kitten.l1 {background: linear-gradient(145deg, #fff6e6,#ffe4b5);} 
+		.kitten.l2 {background: linear-gradient(145deg, #e9f7ff,#b8e0ff);} 
+		.kitten.l3 {background: linear-gradient(145deg, #f3e9ff,#d8b8ff);} 
+		.kitten.l4 {background: linear-gradient(145deg, #e6ffe6,#b8ffb8);} 
+		.kitten.l5 {background: linear-gradient(145deg, #fff0e6,#ffd4b8);}
+		.kitten.l6 {background: linear-gradient(145deg, #ffe6f0,#ffb8d4);}
+		.kitten.combine {
+			transform: scale(1.1); 
+			box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+		}
+		.kitten.dragging {
+			opacity: 0.7; 
+			transform: scale(0.95);
+		}
+		.footer {
+			margin-top:16px;
+			color: rgba(255,255,255,0.8);
+			font-size: 13px;
+		}
 		.stats {
 			display:flex; 
-			gap: 6px; 
+			gap: 8px; 
 			flex-wrap:wrap; 
 			justify-content:center; 
-			margin-top: 8px;
+			margin-top: 12px;
 			width: 100%;
 		}
 		.badge {
-			background:#fff; 
-			padding:4px 8px; 
-			border-radius:999px; 
-			box-shadow:0 2px 6px rgba(0,0,0,0.04);
-			font-size: 12px;
-		} 
+			background: rgba(255,255,255,0.95);
+			padding: 6px 12px; 
+			border-radius: 20px; 
+			box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+			font-size: 13px;
+			font-weight: 500;
+		}
 		/* 成就展示 - 右下角小弹窗 */
 		#achievement-notification {
 			position: fixed;
-			bottom: 20px;
-			right: 20px;
-			background: linear-gradient(135deg, #ffd27a, #ffb86b);
-			padding: 16px 20px;
-			border-radius: 12px;
-			box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+			bottom: 24px;
+			right: 24px;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			padding: 20px 24px;
+			border-radius: 16px;
+			box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
 			text-align: left;
 			z-index: 100;
 			transform: translateX(120%);
 			transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-			max-width: 280px;
+			max-width: 300px;
 			display: flex;
 			align-items: center;
-			gap: 12px;
+			gap: 16px;
 		}
 		#achievement-notification.show { transform: translateX(0); }
 		#achievement-notification .ach-emoji {
-			font-size: 36px;
+			font-size: 48px;
 			flex-shrink: 0;
 		}
 		#achievement-notification .ach-content {
 			flex: 1;
 		}
 		#achievement-notification .ach-title {
-			font-size: 16px;
+			font-size: 18px;
 			font-weight: bold;
-			color: #8b4513;
-			margin-bottom: 2px;
+			color: white;
+			margin-bottom: 4px;
 		}
 		#achievement-notification .ach-desc {
-			font-size: 12px;
-			color: #a0522d;
+			font-size: 13px;
+			color: rgba(255,255,255,0.9);
 		}
 		#achievement-notification .ach-reward {
-			font-size: 12px;
-			color: #d35400;
-			margin-top: 4px;
+			font-size: 13px;
+			color: #ffd27a;
+			margin-top: 6px;
 			font-weight: bold;
 		}
 		/* 成就浏览界面 */
 		#achievements-panel {
 			position: fixed;
 			inset: 0;
-			background: rgba(0,0,0,0.5);
+			background: rgba(102, 126, 234, 0.8);
+			backdrop-filter: blur(8px);
 			display: none;
 			align-items: center;
 			justify-content: center;
 			z-index: 200;
-			padding: 20px;
+			padding: 24px;
 		}
 		#achievements-panel.show { display: flex; }
 		#achievements-content {
 			background: white;
-			border-radius: 16px;
+			border-radius: 24px;
 			width: 100%;
-			max-width: 400px;
+			max-width: 420px;
 			max-height: 80vh;
 			overflow: hidden;
+			box-shadow: 0 20px 60px rgba(0,0,0,0.3);
 		}
 		#achievements-header {
-			background: linear-gradient(135deg, #ffd27a, #ffb86b);
-			padding: 20px;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			padding: 24px;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
 		}
 		#achievements-header h2 {
-			font-size: 20px;
-			color: #8b4513;
+			font-size: 22px;
+			color: white;
 			margin: 0;
+			font-weight: 700;
 		}
 		#achievements-close {
-			font-size: 24px;
+			font-size: 28px;
 			cursor: pointer;
-			color: #8b4513;
+			color: white;
+			transition: transform 0.2s;
+		}
+		#achievements-close:hover {
+			transform: scale(1.2);
 		}
 		#achievements-list {
-			padding: 12px;
+			padding: 16px;
 			overflow-y: auto;
-			max-height: calc(80vh - 80px);
+			max-height: calc(80vh - 100px);
 		}
 		.achievement-item {
 			display: flex;
 			align-items: center;
-			gap: 12px;
-			padding: 12px;
-			border-radius: 10px;
-			margin-bottom: 8px;
-			background: #f9f9f9;
-			opacity: 0.5;
-			filter: grayscale(1);
+			gap: 16px;
+			padding: 16px;
+			border-radius: 16px;
+			margin-bottom: 12px;
+			background: #f8f9fa;
+			opacity: 0.6;
+			filter: grayscale(0.8);
+			transition: all 0.3s ease;
 		}
 		.achievement-item.unlocked {
 			opacity: 1;
 			filter: grayscale(0);
-			background: linear-gradient(135deg, #fff8f0, #fff0e0);
+			background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+			border: 2px solid rgba(102, 126, 234, 0.3);
 		}
 		.achievement-item .ach-icon {
-			font-size: 28px;
+			font-size: 36px;
 		}
 		.achievement-item .ach-info {
 			flex: 1;
 		}
 		.achievement-item .ach-name {
 			font-weight: bold;
-			font-size: 14px;
+			font-size: 15px;
+			color: #333;
+			margin-bottom: 4px;
 		}
 		.achievement-item .ach-desc {
-			font-size: 12px;
+			font-size: 13px;
 			color: #666;
 		}
 		.achievement-item .ach-lock {
-			font-size: 20px;
-			color: #999;
+			font-size: 24px;
+			color: #ccc;
 		}
 		.achievement-item.unlocked .ach-lock {
 			display: none;
@@ -295,135 +361,163 @@
 		#shop-panel {
 			position: fixed;
 			inset: 0;
-			background: rgba(0,0,0,0.5);
+			background: rgba(118, 75, 162, 0.8);
+			backdrop-filter: blur(8px);
 			display: none;
 			align-items: center;
 			justify-content: center;
 			z-index: 200;
-			padding: 20px;
+			padding: 24px;
 		}
 		#shop-panel.show { display: flex; }
 		#shop-content {
 			background: white;
-			border-radius: 16px;
+			border-radius: 24px;
 			width: 100%;
-			max-width: 400px;
+			max-width: 420px;
 			max-height: 80vh;
 			overflow: hidden;
+			box-shadow: 0 20px 60px rgba(0,0,0,0.3);
 		}
 		#shop-header {
-			background: linear-gradient(135deg, #9b59b6, #8e44ad);
-			padding: 20px;
+			background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+			padding: 24px;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
 		}
 		#shop-header h2 {
-			font-size: 20px;
+			font-size: 22px;
 			color: white;
 			margin: 0;
+			font-weight: 700;
 		}
 		#shop-close {
-			font-size: 24px;
+			font-size: 28px;
 			cursor: pointer;
 			color: white;
+			transition: transform 0.2s;
 		}
-		#shop-red-diamonds {
-			font-size: 16px;
+		#shop-close:hover {
+			transform: scale(1.2);
+		}
+		#shop-gold {
+			font-size: 18px;
 			color: #ffd27a;
 			font-weight: bold;
 		}
 		#shop-items {
-			padding: 12px;
+			padding: 16px;
 			overflow-y: auto;
-			max-height: calc(80vh - 100px);
+			max-height: calc(80vh - 120px);
 		}
 		.shop-item {
 			display: flex;
 			align-items: center;
-			gap: 12px;
-			padding: 16px;
-			border-radius: 12px;
-			margin-bottom: 12px;
-			background: linear-gradient(135deg, #f8f8ff, #f0f0ff);
-			border: 1px solid #e8e8ff;
+			gap: 16px;
+			padding: 20px;
+			border-radius: 16px;
+			margin-bottom: 16px;
+			background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+			border: 2px solid #dee2e6;
+			transition: all 0.3s ease;
+		}
+		.shop-item:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+			border-color: #764ba2;
 		}
 		.shop-item .item-icon {
-			font-size: 36px;
+			font-size: 48px;
 		}
 		.shop-item .item-info {
 			flex: 1;
 		}
 		.shop-item .item-name {
 			font-weight: bold;
-			font-size: 16px;
-			margin-bottom: 4px;
+			font-size: 18px;
+			margin-bottom: 6px;
+			color: #333;
 		}
 		.shop-item .item-desc {
-			font-size: 12px;
+			font-size: 14px;
 			color: #666;
 		}
 		.shop-item .item-buy {
-			padding: 8px 16px;
-			background: linear-gradient(135deg, #9b59b6, #8e44ad);
+			padding: 12px 24px;
+			background: linear-gradient(135deg, #764ba2, #667eea);
 			color: white;
 			border: none;
-			border-radius: 20px;
+			border-radius: 24px;
 			cursor: pointer;
-			font-size: 14px;
+			font-size: 16px;
 			font-weight: bold;
+			box-shadow: 0 4px 12px rgba(118, 75, 162, 0.4);
+			transition: all 0.3s ease;
+		}
+		.shop-item .item-buy:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 16px rgba(118, 75, 162, 0.5);
 		}
 		.shop-item .item-buy:disabled {
 			background: #ccc;
 			cursor: not-allowed;
+			box-shadow: none;
 		}
 		#menu-buttons {
 			display: flex;
-			gap: 8px;
-			margin-top: 8px;
+			gap: 12px;
+			margin-top: 12px;
 		}
 		#achievements-btn, #shop-btn {
-			padding: 10px 16px;
-			font-size: 14px;
-			border-radius: 8px;
+			padding: 14px 24px;
+			font-size: 15px;
+			border-radius: 12px;
 			border: none;
 			cursor: pointer;
+			font-weight: 600;
+			transition: all 0.3s ease;
 		}
 		#achievements-btn {
-			background: linear-gradient(#ffd27a, #ffb86b);
+			background: linear-gradient(135deg, #ffd27a, #ffb86b);
 			color: #8b4513;
+			box-shadow: 0 4px 12px rgba(255, 179, 107, 0.4);
 		}
 		#shop-btn {
-			background: linear-gradient(#9b59b6, #8e44ad);
+			background: linear-gradient(135deg, #764ba2, #667eea);
 			color: white;
+			box-shadow: 0 4px 12px rgba(118, 75, 162, 0.4);
+		}
+		#achievements-btn:hover, #shop-btn:hover {
+			transform: translateY(-2px);
 		}
 		/* 左下角物品栏 */
 		#inventory-panel {
 			position: fixed;
-			bottom: 20px;
-			left: 20px;
+			bottom: 24px;
+			left: 24px;
 			display: flex;
-			gap: 12px;
+			gap: 16px;
 			z-index: 90;
 		}
 		.inventory-item {
-			width: 56px;
-			height: 56px;
-			background: white;
-			border-radius: 12px;
-			box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+			width: 64px;
+			height: 64px;
+			background: linear-gradient(145deg, #ffffff, #f0f0f0);
+			border-radius: 16px;
+			box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			font-size: 28px;
+			font-size: 32px;
 			cursor: pointer;
 			position: relative;
-			transition: transform 0.15s ease, box-shadow 0.15s ease;
+			transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 			user-select: none;
 		}
 		.inventory-item:hover {
-			transform: scale(1.05);
-			box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+			transform: scale(1.1);
+			box-shadow: 0 8px 25px rgba(0,0,0,0.2);
 		}
 		.inventory-item:active {
 			transform: scale(0.95);
@@ -435,34 +529,35 @@
 		}
 		.inventory-item.disabled:hover {
 			transform: none;
-			box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+			box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 		}
 		.inventory-item .item-count {
 			position: absolute;
-			bottom: -4px;
-			right: -4px;
-			background: #e74c3c;
+			bottom: -6px;
+			right: -6px;
+			background: linear-gradient(135deg, #f5576c, #f093fb);
 			color: white;
-			font-size: 12px;
+			font-size: 13px;
 			font-weight: bold;
-			min-width: 20px;
-			height: 20px;
-			border-radius: 10px;
+			min-width: 22px;
+			height: 22px;
+			border-radius: 12px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			padding: 0 4px;
-			box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+			padding: 0 6px;
+			box-shadow: 0 3px 8px rgba(245, 87, 108, 0.4);
 		}
 		.inventory-item.disabled .item-count {
 			background: #999;
+			box-shadow: none;
 		}
 		.inventory-item.using {
-			animation: pulse 0.5s ease-in-out infinite;
+			animation: pulse 0.6s ease-in-out infinite;
 		}
 		@keyframes pulse {
 			0%, 100% { transform: scale(1); }
-			50% { transform: scale(1.1); }
+			50% { transform: scale(1.15); }
 		}
 		#start-screen {
 			position:fixed; 
@@ -470,50 +565,595 @@
 			display:flex; 
 			align-items:center; 
 			justify-content:center; 
-			background:linear-gradient(rgba(10,10,20,0.35), rgba(10,10,20,0.35)); 
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 			z-index:60;
-			padding: 20px;
+			padding: 24px;
 		}
 		#start-screen .start-card {
 			background:white; 
-			padding: 24px; 
-			border-radius:12px; 
-			box-shadow:0 8px 30px rgba(20,20,40,0.12); 
+			padding: 32px; 
+			border-radius:24px; 
+			box-shadow:0 20px 60px rgba(0,0,0,0.3); 
 			text-align:center;
 			width: 100%;
-			max-width: 320px;
+			max-width: 360px;
 		}
 		#start-screen h2 {
-			font-size: 20px;
-			margin-bottom: 16px;
+			font-size: 24px;
+			margin-bottom: 20px;
+			color: #333;
+			font-weight: 700;
 		}
 		#start-coins {
-			width:80px;
-			padding:6px;
-			border-radius:6px;
-			border:1px solid #ddd;
+			width:100px;
+			padding:10px;
+			border-radius:12px;
+			border:2px solid #e0e0e0;
 			text-align: center;
+			font-size: 16px;
 		}
 		#start-btn {
-			padding:12px 20px;
-			border-radius:8px;
-			font-size:16px;
+			padding:16px 32px;
+			border-radius:12px;
+			font-size:18px;
 			cursor:pointer;
-			background: #ffd27a;
+			background: linear-gradient(135deg, #667eea, #764ba2);
+			color: white;
 			border: none;
-			margin: 12px 0;
+			margin: 16px 0;
 			width: 100%;
+			font-weight: 600;
+			box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+			transition: all 0.3s ease;
+		}
+		#start-btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
 		}
 		#game-root {
 			width: 100%;
 		}
+		/* 右上角聊天图标 */
+		#chat-icon {
+			position: fixed;
+			top: 24px;
+			right: 24px;
+			width: 56px;
+			height: 56px;
+			background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 28px;
+			cursor: pointer;
+			box-shadow: 0 4px 16px rgba(0, 210, 255, 0.4);
+			transition: all 0.3s ease;
+			z-index: 100;
+		}
+		#chat-icon:hover {
+			transform: scale(1.1);
+			box-shadow: 0 6px 20px rgba(0, 210, 255, 0.5);
+		}
+		#chat-icon .chat-badge {
+			position: absolute;
+			top: -4px;
+			right: -4px;
+			width: 18px;
+			height: 18px;
+			background: #e74c3c;
+			border-radius: 50%;
+			font-size: 11px;
+			color: white;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		/* 任务栏样式 - 充满右侧 */
+		#chat-panel {
+			position: fixed;
+			top: 0;
+			right: 0;
+			width: 280px;
+			height: 100vh;
+			background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+			box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+			display: flex;
+			flex-direction: column;
+			z-index: 300;
+			transform: translateX(100%);
+			transition: transform 0.3s ease;
+		}
+		#chat-panel.show {
+			transform: translateX(0);
+		}
+		#chat-header {
+			background: rgba(255,255,255,0.15);
+			padding: 20px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			border-bottom: 1px solid rgba(255,255,255,0.1);
+		}
+		#chat-header h2 {
+			font-size: 16px;
+			color: white;
+			margin: 0;
+			font-weight: 700;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+		#chat-close {
+			font-size: 24px;
+			cursor: pointer;
+			color: white;
+			transition: all 0.2s;
+			line-height: 1;
+			width: 32px;
+			height: 32px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+			background: rgba(255,255,255,0.2);
+		}
+		#chat-close:hover {
+			transform: scale(1.1);
+			background: rgba(255,255,255,0.3);
+		}
+		#chat-messages {
+			flex: 1;
+			padding: 16px;
+			overflow-y: auto;
+			background: rgba(255,255,255,0.05);
+		}
+		.chat-message {
+			margin-bottom: 12px;
+			display: flex;
+			flex-direction: column;
+		}
+		.chat-message .msg-sender {
+			font-size: 11px;
+			color: rgba(255,255,255,0.6);
+			margin-bottom: 4px;
+		}
+		.chat-message .msg-content {
+			background: rgba(255,255,255,0.95);
+			padding: 12px 16px;
+			border-radius: 12px;
+			font-size: 14px;
+			line-height: 1.5;
+			color: #333;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+			word-wrap: break-word;
+		}
+		.chat-message.system .msg-content {
+			background: rgba(255, 215, 0, 0.95);
+			color: #333;
+			font-weight: 600;
+		}
+		/* 任务列表样式 */
+		#task-list {
+			flex: 1;
+			padding: 12px;
+			overflow-y: auto;
+			background: rgba(255,255,255,0.05);
+		}
+		.task-item {
+			background: rgba(255,255,255,0.95);
+			border-radius: 12px;
+			padding: 14px;
+			margin-bottom: 10px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+		}
+		.task-item:hover {
+			transform: translateX(-4px);
+			box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+		}
+		.task-item-header {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin-bottom: 8px;
+		}
+		.task-item-emoji {
+			font-size: 20px;
+		}
+		.task-item-title {
+			font-size: 14px;
+			font-weight: 700;
+			color: #333;
+			flex: 1;
+		}
+		.task-item-reward {
+			font-size: 12px;
+			color: #667eea;
+			font-weight: 600;
+		}
+		.task-item-desc {
+			font-size: 12px;
+			color: #666;
+			line-height: 1.4;
+		}
+		.task-item-requirement {
+			font-size: 11px;
+			color: #667eea;
+			margin-top: 6px;
+			font-weight: 600;
+		}
+		.task-item-time {
+			font-size: 10px;
+			color: #999;
+			margin-top: 6px;
+		}
+		.task-empty {
+			text-align: center;
+			color: rgba(255,255,255,0.5);
+			font-size: 14px;
+			padding: 40px 20px;
+		}
+		/* 聊天弹窗样式 */
+		.chat-popup {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%) scale(0.9);
+			width: 90%;
+			max-width: 380px;
+			background: white;
+			border-radius: 20px;
+			box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+			display: none;
+			flex-direction: column;
+			overflow: hidden;
+			z-index: 400;
+			opacity: 0;
+			transition: all 0.3s ease;
+		}
+		.chat-popup.show {
+			display: flex;
+			opacity: 1;
+			transform: translate(-50%, -50%) scale(1);
+		}
+		.chat-popup-header {
+			background: linear-gradient(135deg, #667eea, #764ba2);
+			padding: 16px 20px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+		.chat-popup-title {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			color: white;
+			font-size: 16px;
+			font-weight: 700;
+		}
+		.chat-popup-title span:first-child {
+			font-size: 24px;
+		}
+		.chat-popup-close {
+			font-size: 28px;
+			cursor: pointer;
+			color: white;
+			transition: transform 0.2s;
+			line-height: 1;
+			width: 32px;
+			height: 32px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+			background: rgba(255,255,255,0.2);
+		}
+		.chat-popup-close:hover {
+			transform: scale(1.1);
+			background: rgba(255,255,255,0.3);
+		}
+		.chat-popup-messages {
+			flex: 1;
+			padding: 16px;
+			overflow-y: auto;
+			background: #f5f7fa;
+			min-height: 250px;
+			max-height: 300px;
+		}
+		.chat-popup-messages .chat-message {
+			margin-bottom: 12px;
+			display: flex;
+			flex-direction: column;
+		}
+		.chat-popup-messages .msg-sender {
+			font-size: 11px;
+			color: #666;
+			margin-bottom: 4px;
+		}
+		.chat-popup-messages .msg-content {
+			background: white;
+			padding: 12px 16px;
+			border-radius: 16px;
+			font-size: 14px;
+			line-height: 1.5;
+			color: #333;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+			word-wrap: break-word;
+		}
+		.chat-popup-messages .chat-message.system .msg-content {
+			background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+			color: #667eea;
+			font-weight: 600;
+		}
+		.chat-popup-input-area {
+			padding: 16px;
+			background: white;
+			border-top: 1px solid #eee;
+			display: flex;
+			gap: 10px;
+		}
+		.chat-popup-input-area input {
+			flex: 1;
+			padding: 12px 16px;
+			border: 2px solid #e0e0e0;
+			border-radius: 24px;
+			font-size: 14px;
+			outline: none;
+			transition: border-color 0.3s;
+		}
+		.chat-popup-input-area input:focus {
+			border-color: #667eea;
+		}
+		.chat-popup-input-area button {
+			padding: 12px 20px;
+			background: linear-gradient(135deg, #667eea, #764ba2);
+			color: white;
+			border: none;
+			border-radius: 24px;
+			cursor: pointer;
+			font-weight: 700;
+			font-size: 14px;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+		}
+		#select-cats-wrapper {
+			width: 100%;
+		}
+		#cat-selection-hint {
+			font-size: 14px;
+			font-weight: 600;
+			color: #667eea;
+			margin-bottom: 10px;
+		}
+		#cat-selection-list {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 8px;
+			max-height: 150px;
+			overflow-y: auto;
+			margin-bottom: 10px;
+		}
+		.cat-select-item {
+			background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+			border-radius: 10px;
+			padding: 8px;
+			text-align: center;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			border: 2px solid transparent;
+		}
+		.cat-select-item:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+		}
+		.cat-select-item.selected {
+			border-color: #667eea;
+			box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+		}
+		.cat-select-item.disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+		.cat-select-item .cat-emoji {
+			font-size: 24px;
+			display: block;
+		}
+		.cat-select-item .cat-level {
+			font-size: 10px;
+			color: #666;
+			font-weight: 600;
+		}
+		#selected-cats-summary {
+			font-size: 12px;
+			color: #666;
+			text-align: center;
+			padding: 8px;
+			background: rgba(102, 126, 234, 0.1);
+			border-radius: 8px;
+		}
+		#submit-task-btn {
+			width: 100%;
+			margin-top: 10px;
+			padding: 12px 24px;
+			background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+			color: white;
+			border: none;
+			border-radius: 12px;
+			cursor: pointer;
+			font-weight: 700;
+			font-size: 14px;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 12px rgba(240, 147, 251, 0.4);
+		}
+		#submit-task-btn:hover:not(:disabled) {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 16px rgba(240, 147, 251, 0.6);
+		}
+		#submit-task-btn:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+		.chat-popup-input-area button:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+		}
+		/* 电话动画 */
+		.phone-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0,0,0,0.8);
+			display: none;
+			justify-content: center;
+			align-items: center;
+			z-index: 500;
+			opacity: 0;
+			transition: opacity 0.3s ease;
+		}
+		.phone-overlay.show {
+			display: flex;
+			opacity: 1;
+		}
+		.phone-animation {
+			text-align: center;
+			color: white;
+		}
+		.phone-icon {
+			font-size: 80px;
+			animation: phoneRing 1s ease-in-out infinite;
+		}
+		@keyframes phoneRing {
+			0%, 100% { transform: rotate(-15deg) scale(1); }
+			50% { transform: rotate(15deg) scale(1.1); }
+		}
+		.phone-text {
+			font-size: 24px;
+			margin-top: 20px;
+			font-weight: 700;
+			color: #667eea;
+		}
+		.phone-subtext {
+			font-size: 16px;
+			margin-top: 10px;
+			color: rgba(255,255,255,0.7);
+			animation: phoneConnecting 1.5s ease-in-out infinite;
+		}
+		@keyframes phoneConnecting {
+			0%, 100% { opacity: 0.5; }
+			50% { opacity: 1; }
+		}
+		.phone-dots {
+			display: inline-block;
+		}
+		.phone-dots::after {
+			content: '';
+			animation: dots 1.5s steps(4, end) infinite;
+		}
+		@keyframes dots {
+			0% { content: ''; }
+			25% { content: '.'; }
+			50% { content: '..'; }
+			75% { content: '...'; }
+			100% { content: ''; }
+		}
+		/* 电话选择界面 */
+		.phone-choice-container {
+			background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+			border-radius: 20px;
+			padding: 40px 30px;
+			width: 300px;
+			text-align: center;
+			box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+			animation: phoneSlideUp 0.5s ease;
+		}
+		@keyframes phoneSlideUp {
+			from {
+				opacity: 0;
+				transform: translateY(50px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+		.phone-caller {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 15px;
+			margin-bottom: 40px;
+		}
+		.phone-caller span:first-child {
+			font-size: 60px;
+			animation: phonePulse 2s ease-in-out infinite;
+		}
+		@keyframes phonePulse {
+			0%, 100% { transform: scale(1); }
+			50% { transform: scale(1.1); }
+		}
+		.phone-caller-info {
+			text-align: left;
+		}
+		.phone-caller-name {
+			font-size: 22px;
+			font-weight: 700;
+			color: white;
+			margin-bottom: 5px;
+		}
+		.phone-caller-number {
+			font-size: 14px;
+			color: rgba(255,255,255,0.7);
+			animation: phoneConnecting 1.5s ease-in-out infinite;
+		}
+		.phone-buttons {
+			display: flex;
+			justify-content: center;
+			gap: 30px;
+		}
+		.phone-buttons button {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 8px;
+			padding: 15px 25px;
+			border: none;
+			border-radius: 50px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			font-size: 14px;
+			font-weight: 600;
+			color: white;
+		}
+		.phone-btn-icon {
+			font-size: 30px;
+		}
+		.phone-decline {
+			background: rgba(255, 59, 48, 0.9);
+			box-shadow: 0 4px 15px rgba(255, 59, 48, 0.4);
+		}
+		.phone-decline:hover {
+			transform: scale(1.1);
+			box-shadow: 0 6px 20px rgba(255, 59, 48, 0.6);
+		}
+		.phone-accept {
+			background: linear-gradient(135deg, #34c759, #30d158);
+			box-shadow: 0 4px 15px rgba(52, 199, 89, 0.4);
+		}
+		.phone-accept:hover {
+			transform: scale(1.1);
+			box-shadow: 0 6px 20px rgba(52, 199, 89, 0.6);
+		}
 	</style>
 </head>
 <body>
-	<div id="start-screen">
+		<div id="start-screen">
 		<div class="start-card">
 			<h2>合成小猫 — 点击开始</h2>
-			<div style="margin:8px 0">初始金币: <input id="start-coins" type="number" min="0" value="50"></div>
+			<div style="margin:8px 0">初始好感值: <input id="start-coins" type="number" min="0" value="50"></div>
 			<button id="start-btn">开始游戏</button>
 			<div style="font-size:12px;color:#666;margin-top:8px">按空格/点击生成小猫，拖拽或自动合成。</div>
 		</div>
@@ -539,9 +1179,10 @@
 			<div id="player-exp-text">经验: <span id="player-exp">0</span>/<span id="player-exp-next">15</span></div>
 		</div>
 		<div id="coins-panel">
-			<div>金币: <span id="coins">50</span></div>
+			<div>好感值: <span id="coins">50</span></div>
 			<div>产出: <span id="prod-per-minute">0</span>/min （<span id="prod-per-second">0</span>/s）</div>
 		</div>
+		<div id="gems-display">💰 金币: <span id="gems">0</span></div>
 		<div id="menu-buttons">
 			<button id="achievements-btn">🏆 成就</button>
 			<button id="shop-btn">🛒 商店</button>
@@ -557,7 +1198,7 @@
 		<div class="ach-content">
 			<div class="ach-title" id="ach-title">成就解锁!</div>
 			<div class="ach-desc" id="ach-desc">描述</div>
-			<div class="ach-reward" id="ach-reward">+15 红钻</div>
+			<div class="ach-reward" id="ach-reward">+15 金币</div>
 		</div>
 	</div>
 
@@ -570,6 +1211,73 @@
 		<div class="inventory-item" id="arm-item" onclick="useArm()">
 			🦾
 			<div class="item-count" id="arm-count">0</div>
+		</div>
+	</div>
+
+	<!-- 右上角聊天图标 -->
+	<div id="chat-icon" onclick="openChat()">
+		💬
+		<div class="chat-badge" id="chat-badge" style="display:none;"></div>
+	</div>
+
+	<!-- 任务栏 -->
+	<div id="chat-panel">
+		<div id="chat-header">
+			<h2>📋 任务栏</h2>
+			<span id="chat-close" onclick="closeChat()">×</span>
+		</div>
+		<div id="task-list"></div>
+	</div>
+
+	<!-- 任务对话弹窗 -->
+	<div id="chat-popup" class="chat-popup">
+		<div class="chat-popup-header">
+			<div class="chat-popup-title">
+				<span id="chat-popup-emoji">💬</span>
+				<span id="chat-popup-task-name">任务对话</span>
+			</div>
+			<span class="chat-popup-close" onclick="closeChatPopup()">×</span>
+		</div>
+		<div id="chat-popup-messages" class="chat-popup-messages"></div>
+		<div id="chat-popup-action-area" class="chat-popup-input-area">
+			<div id="select-cats-wrapper">
+				<div id="cat-selection-hint">请选择要送出的小猫</div>
+				<div id="cat-selection-list"></div>
+				<div id="selected-cats-summary"></div>
+			</div>
+			<button id="submit-task-btn" onclick="submitTask()">送出小猫并完成任务</button>
+		</div>
+	</div>
+
+	<!-- 电话选择界面 -->
+	<div id="phone-choice" class="phone-overlay">
+		<div class="phone-choice-container">
+			<div class="phone-caller">
+				<span id="phone-task-emoji">🐱</span>
+				<div class="phone-caller-info">
+					<div class="phone-caller-name" id="phone-task-name">猫咪</div>
+					<div class="phone-caller-number">请求视频通话...</div>
+				</div>
+			</div>
+			<div class="phone-buttons">
+				<button class="phone-decline" onclick="declineCall()">
+					<span class="phone-btn-icon">📵</span>
+					<span>拒绝</span>
+				</button>
+				<button class="phone-accept" onclick="acceptCall()">
+					<span class="phone-btn-icon">📞</span>
+					<span>接听</span>
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- 电话动画 -->
+	<div id="phone-overlay" class="phone-overlay">
+		<div class="phone-animation">
+			<div class="phone-icon">📞</div>
+			<div class="phone-text">正在呼叫...</div>
+			<div class="phone-subtext">连接中<span class="phone-dots"></span></div>
 		</div>
 	</div>
 
@@ -590,7 +1298,7 @@
 			<div id="shop-header">
 				<h2>🛒 商店</h2>
 				<div>
-					<span id="shop-red-diamonds">💎 0</span>
+					<span id="shop-gold">💰 0</span>
 					<span id="shop-close" onclick="closeShop()" style="margin-left: 12px;">×</span>
 				</div>
 			</div>
@@ -599,17 +1307,17 @@
 					<div class="item-icon">🐟</div>
 					<div class="item-info">
 						<div class="item-name">小鱼干</div>
-						<div class="item-desc">使用后立即获得50金币</div>
+						<div class="item-desc">使用后加快小猫生产速度5倍，持续30秒</div>
 					</div>
-					<button class="item-buy" onclick="buyItem('fish')">💎 20</button>
+					<button class="item-buy" onclick="buyItem('fish')">💰 100</button>
 				</div>
 				<div class="shop-item">
 					<div class="item-icon">🦾</div>
 					<div class="item-info">
 						<div class="item-name">机械臂</div>
-						<div class="item-desc">自动合成速度提升50%</div>
+						<div class="item-desc">自动合成相邻的相同等级小猫</div>
 					</div>
-					<button class="item-buy" onclick="buyItem('arm')">💎 35</button>
+					<button class="item-buy" onclick="buyItem('arm')">💰 200</button>
 				</div>
 			</div>
 		</div>
@@ -634,21 +1342,22 @@
 		const achievementsList = document.getElementById('achievements-list');
 		const shopBtn = document.getElementById('shop-btn');
 		const shopPanel = document.getElementById('shop-panel');
-		const shopRedDiamonds = document.getElementById('shop-red-diamonds');
+		const shopGold = document.getElementById('shop-gold');
+		const gemsEl = document.getElementById('gems');
 
 		let idCounter = 0;
 		const kittens = []; // {id, level, el}
 
 		const player = { level: 1, exp: 0 };
-		let coins = 50; // 初始金币
-		let totalCoinsEarned = 0; // 累计获得的金币
-		let redDiamonds = 0; // 红钻
+		let coins = 50; // 初始好感值
+		let totalCoinsEarned = 0; // 累计获得的好感值
+		let gems = 0; // 金币（完成任务获得，可用于商店购买）
 		let autoMergeEnabled = true;
 		let prodPerMinute = 0;
 		let nextSpawnPreview = null;
 		let audioCtx = null;
 		let unlockedLevels = new Set(); // 记录已解锁的等级成就
-		let unlockedCoinMilestones = new Set(); // 记录已解锁的金币里程碑
+		let unlockedCoinMilestones = new Set(); // 记录已解锁的好感值里程碑
 		let mergeSpeedBonus = 1; // 合成速度加成
 		
 		// 物品数量
@@ -794,10 +1503,10 @@
 			achEmoji.textContent = ach.emoji;
 			achTitle.textContent = ach.title;
 			achDesc.textContent = ach.desc;
-			achReward.textContent = `+${reward} 红钻`;
+			achReward.textContent = `+${reward} 金币`;
 			
-			redDiamonds += reward;
-			updateRedDiamondUI();
+			gems += reward;
+			updateGemsUI();
 			
 			// 播放成就音效
 			playAchievementSound();
@@ -810,15 +1519,15 @@
 			}, 3000);
 		}
 
-		// 金币里程碑成就
+		// 好感值里程碑成就
 		const coinMilestones = {
-			100: { emoji: '💰', title: '第一桶金', desc: '累计获得100金币！', reward: 15 },
-			10000: { emoji: '💎', title: '初具成型', desc: '累计获得10,000金币！', reward: 50 },
-			1000000: { emoji: '👑', title: '金币大亨', desc: '累计获得1,000,000金币！', reward: 200 },
-			1000000000: { emoji: '🏦', title: '华尔街的狼', desc: '累计获得1,000,000,000金币！', reward: 500 }
+			100: { emoji: '💰', title: '初次心动', desc: '累计获得100好感值！', reward: 15 },
+			10000: { emoji: '💎', title: '渐入佳境', desc: '累计获得10,000好感值！', reward: 50 },
+			1000000: { emoji: '👑', title: '情深似海', desc: '累计获得1,000,000好感值！', reward: 200 },
+			1000000000: { emoji: '🏦', title: '海枯石烂', desc: '累计获得1,000,000,000好感值！', reward: 500 }
 		};
 
-		// 检查金币里程碑
+		// 检查好感值里程碑
 		function checkCoinMilestones() {
 			for (const threshold of Object.keys(coinMilestones).map(Number).sort((a,b)=>a-b)) {
 				if (totalCoinsEarned >= threshold && !unlockedCoinMilestones.has(threshold)) {
@@ -828,10 +1537,10 @@
 					achEmoji.textContent = ach.emoji;
 					achTitle.textContent = ach.title;
 					achDesc.textContent = ach.desc;
-					achReward.textContent = `+${ach.reward} 红钻`;
+					achReward.textContent = `+${ach.reward} 金币`;
 					
-					redDiamonds += ach.reward;
-					updateRedDiamondUI();
+					gems += ach.reward;
+					updateGemsUI();
 					
 					// 播放成就音效
 					playAchievementSound();
@@ -845,8 +1554,14 @@
 			}
 		}
 
-		// 更新红钻UI
-		function updateRedDiamondUI() {
+		// 更新金币UI
+		function updateGemsUI() {
+			// 更新右上角金币显示
+			if (gemsEl) {
+				gemsEl.textContent = Math.floor(gems);
+			}
+
+			// 更新成就面板中的金币显示
 			const panel = document.getElementById('coins-panel');
 			let rdEl = document.getElementById('red-diamonds-display');
 			if (!rdEl) {
@@ -857,8 +1572,8 @@
 				rdEl.style.marginTop = '4px';
 				panel.appendChild(rdEl);
 			}
-			rdEl.textContent = `红钻: 💎 ${redDiamonds}`;
-			shopRedDiamonds.textContent = `💎 ${redDiamonds}`;
+			// 更新商店面板中的金币显示
+			shopGold.textContent = `💰 ${Math.floor(gems)}`;
 		}
 
 		// 打开成就面板
@@ -883,7 +1598,7 @@
 				achievementsList.appendChild(item);
 			});
 			
-			// 金币里程碑成就
+			// 好感值里程碑成就
 			const coinAchs = Object.keys(coinMilestones).map(Number).sort((a,b)=>a-b);
 			coinAchs.forEach(threshold => {
 				const ach = coinMilestones[threshold];
@@ -911,7 +1626,7 @@
 
 		// 打开商店
 		function openShop() {
-			updateRedDiamondUI();
+			updateGemsUI();
 			shopPanel.classList.add('show');
 		}
 
@@ -920,22 +1635,22 @@
 			shopPanel.classList.remove('show');
 		}
 
-		// 购买物品
+		// 购买物品（使用金币）
 		function buyItem(itemId) {
 			const items = {
-				fish: { cost: 20, name: '小鱼干' },
-				arm: { cost: 35, name: '机械臂' }
+				fish: { cost: 100, name: '小鱼干' },
+				arm: { cost: 200, name: '机械臂' }
 			};
 			
 			const item = items[itemId];
 			if (!item) return;
 			
-			if (redDiamonds < item.cost) {
+			if (gems < item.cost) {
 				return;
 			}
 			
-			redDiamonds -= item.cost;
-			updateRedDiamondUI();
+			gems -= item.cost;
+			updateGemsUI();
 			
 			if (itemId === 'fish') {
 				fishCount++;
@@ -982,7 +1697,7 @@
 			}
 		}
 
-		// 使用小鱼干 - 加速金币生产10秒
+		// 使用小鱼干 - 加速好感值生产10秒
 		function useFish() {
 			if (fishCount <= 0) {
 				alert('小鱼干数量不足！');
@@ -993,7 +1708,7 @@
 			fishActive = true;
 			updateInventoryUI();
 			
-			// 金币生产速度加快5倍，持续10秒
+			// 好感值生产速度加快5倍，持续10秒
 			prodPerMinute *= 5;
 			updateCoinUI();
 			
@@ -1032,6 +1747,401 @@
 			}, 15000);
 		}
 
+		// 任务栏系统
+		let tasks = [];
+		let currentTaskId = null;
+		let checkedTasks = new Set(); // 记录已点击过的任务
+		let completedTasksCount = 0; // 完成的任务总数
+		let selectedCatsForTask = []; // 当前任务选中的小猫
+		
+		// 任务模板 - 收养小猫主题
+		const taskTemplates = [
+			{ emoji: '👩', title: '白领女士', desc: '想要领养一只温顺的小猫', catLevel: 1, catsNeeded: 1, reward: 40 },
+			{ emoji: '👨', title: '退休老人', desc: '希望有只猫咪陪伴', catLevel: 1, catsNeeded: 1, reward: 50 },
+			{ emoji: '👦', title: '爱心小朋友', desc: '想要一只小猫作为生日礼物', catLevel: 1, catsNeeded: 2, reward: 90 },
+			{ emoji: '👩‍❤️‍👨', title: '新婚夫妇', desc: '想养一只可爱的猫咪宝宝', catLevel: 2, catsNeeded: 2, reward: 100 },
+			{ emoji: '👨‍👩‍👦', title: '三口之家', desc: '想要一只友善的小猫', catLevel: 2, catsNeeded: 3, reward: 150 },
+			{ emoji: '👴👵', title: '独居老人', desc: '希望猫咪带来欢乐', catLevel: 1, catsNeeded: 2, reward: 125 },
+			{ emoji: '👩‍🍳', title: '美食博主', desc: '想要一只上镜的小猫', catLevel: 3, catsNeeded: 3, reward: 200 },
+			{ emoji: '🏢', title: '公司萌宠', desc: '办公室需要治愈系小猫', catLevel: 3, catsNeeded: 4, reward: 250 },
+			{ emoji: '🎬', title: '网红主播', desc: '想要明星小猫上节目', catLevel: 4, catsNeeded: 5, reward: 350 },
+			{ emoji: '🏰', title: '富豪家族', desc: '想要纯种高贵小猫', catLevel: 5, catsNeeded: 6, reward: 500 },
+			{ emoji: '🐾', title: '救助站', desc: '需要一些可爱的小猫', catLevel: 1, catsNeeded: 5, reward: 200 },
+			{ emoji: '🏥', title: '宠物医院', desc: '需要健康的小猫', catLevel: 2, catsNeeded: 3, reward: 175 },
+			{ emoji: '🎪', title: '马戏团', desc: '想要聪明的小猫表演', catLevel: 4, catsNeeded: 2, reward: 300 },
+			{ emoji: '🎨', title: '艺术工作室', desc: '需要模特小猫', catLevel: 3, catsNeeded: 2, reward: 225 }
+		];
+
+		// 收养任务相关成就
+		const taskAchievements = [
+			{ count: 1, name: '初见', emoji: '🌟', desc: '完成第1个收养任务', reward: 15, unlocked: false },
+			{ count: 10, name: '猫之家', emoji: '🏠', desc: '完成第10个收养任务', reward: 50, unlocked: false },
+			{ count: 100, name: '小猫大使', emoji: '🌍', desc: '完成第100个收养任务', reward: 200, unlocked: false }
+		];
+
+		// 显示任务成就弹窗
+		function showTaskAchievement(achievement) {
+			const popup = document.createElement('div');
+			popup.style.cssText = `
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+				padding: 30px 40px;
+				border-radius: 20px;
+				text-align: center;
+				color: white;
+				z-index: 1000;
+				box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+				animation: achievementPop 0.5s ease;
+			`;
+			popup.innerHTML = `
+				<div style="font-size: 60px; margin-bottom: 15px;">${achievement.emoji}</div>
+				<div style="font-size: 28px; font-weight: bold; margin-bottom: 10px;">🎉 成就解锁：${achievement.name}！</div>
+				<div style="font-size: 16px; opacity: 0.9; margin-bottom: 15px;">${achievement.desc}</div>
+				<div style="font-size: 20px; font-weight: bold;">💰 获得 ${achievement.reward} 金币</div>
+			`;
+
+			// 添加动画样式
+			const style = document.createElement('style');
+			style.textContent = `
+				@keyframes achievementPop {
+					0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+					50% { transform: translate(-50%, -50%) scale(1.1); }
+					100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+				}
+			`;
+			document.head.appendChild(style);
+			document.body.appendChild(popup);
+
+			// 3秒后移除
+			setTimeout(() => {
+				popup.style.opacity = '0';
+				popup.style.transform = 'translate(-50%, -50%) scale(0.8)';
+				popup.style.transition = 'all 0.3s ease';
+				setTimeout(() => {
+					popup.remove();
+					style.remove();
+				}, 300);
+			}, 3000);
+		}
+
+		// 检查收养任务成就
+		function checkTaskAchievements() {
+			taskAchievements.forEach(achievement => {
+				if (!achievement.unlocked && completedTasksCount >= achievement.count) {
+					achievement.unlocked = true;
+					gems += achievement.reward;
+					updateCoinUI();
+					playAchievementSound();
+					showTaskAchievement(achievement);
+				}
+			});
+		}
+
+		// 生成随机任务
+		function generateTask() {
+			// 根据玩家等级筛选可用任务（玩家等级必须大于等于任务要求的小猫等级）
+			const availableTasks = taskTemplates.filter(t => player.level >= t.catLevel);
+			if (availableTasks.length === 0) return null;
+
+			const template = availableTasks[Math.floor(Math.random() * availableTasks.length)];
+
+			// 30%概率刷新为金币报酬任务
+			const isGoldReward = Math.random() < 0.3;
+			const goldMultiplier = isGoldReward ? 2 : 1; // 金币报酬翻倍
+
+			return {
+				id: Date.now(),
+				emoji: template.emoji,
+				title: template.title,
+				desc: template.desc,
+				catLevel: template.catLevel, // 指定需要的小猫等级
+				catsNeeded: template.catsNeeded,
+				reward: isGoldReward ? `💰 +${template.reward * goldMultiplier}金币` : `🎁 +${template.reward}好感值`,
+				rewardValue: template.reward,
+				isGoldReward: isGoldReward,
+				completed: false,
+				time: new Date()
+			};
+		}
+
+		// 渲染任务列表
+		function renderTaskList() {
+			const taskList = document.getElementById('task-list');
+
+
+			taskList.innerHTML = tasks.map(task => `
+				<div class="task-item" onclick="openTaskChat(${task.id})">
+					<div class="task-item-header">
+						<span class="task-item-emoji">${task.emoji}</span>
+						<span class="task-item-title">${task.title}</span>
+						<span class="task-item-reward">${task.completed ? '✅' : task.reward}</span>
+					</div>
+					<div class="task-item-desc">${task.desc}</div>
+					<div class="task-item-requirement">
+						${task.isGoldReward ? '💰 金币报酬' : '🎁 好感值报酬'} · 需要 ${task.catsNeeded} 只 Lv.${task.catLevel} 小猫
+					</div>
+					<div class="task-item-time">${formatTime(task.time)}</div>
+				</div>
+			`).join('');
+		}
+
+		// 格式化时间
+		function formatTime(date) {
+			const now = new Date();
+			const diff = Math.floor((now - date) / 1000);
+			if (diff < 60) return '刚刚';
+			if (diff < 3600) return `${Math.floor(diff / 60)}分钟前`;
+			if (diff < 86400) return `${Math.floor(diff / 3600)}小时前`;
+			return `${Math.floor(diff / 86400)}天前`;
+		}
+
+		// 打开任务聊天
+		function openTaskChat(taskId) {
+			const task = tasks.find(t => t.id === taskId);
+			if (!task) return;
+
+			currentTaskId = taskId;
+
+			// 更新弹窗标题
+			document.getElementById('chat-popup-emoji').textContent = task.emoji;
+			document.getElementById('chat-popup-task-name').textContent = task.title;
+
+			// 检测是否是第一次点击此任务
+			const isFirstClick = !checkedTasks.has(taskId);
+
+			// 如果是第一次点击，添加任务详情消息
+			if (isFirstClick && !task.completed) {
+				checkedTasks.add(taskId);
+				task.messages = [
+					{ sender: task.emoji, content: `${task.title}想要收养小猫！`, isSystem: true, time: new Date() },
+					{ sender: task.emoji, content: task.desc, isSystem: true, time: new Date() },
+					{ sender: '📋', content: `需要：${task.catsNeeded} 只 Lv.${task.catLevel} 小猫\n报酬：${task.isGoldReward ? '💰 ' + task.rewardValue * 2 + ' 金币' : '🎁 ' + task.rewardValue + ' 好感值'}`, isSystem: true, time: new Date() }
+				];
+			}
+
+			// 渲染消息
+			const messagesContainer = document.getElementById('chat-popup-messages');
+			messagesContainer.innerHTML = task.messages.map(msg => `
+				<div class="chat-message ${msg.isSystem ? 'system' : ''}">
+					<div class="msg-sender">${msg.sender} · ${formatTime(msg.time || new Date())}</div>
+					<div class="msg-content">${msg.content.replace(/\n/g, '<br>')}</div>
+				</div>
+			`).join('');
+
+			if (isFirstClick && !task.completed) {
+				// 显示电话选择界面
+				document.getElementById('phone-task-emoji').textContent = task.emoji;
+				document.getElementById('phone-task-name').textContent = task.title;
+				document.getElementById('phone-choice').classList.add('show');
+			} else {
+				// 非第一次点击，直接显示聊天弹窗
+				document.getElementById('chat-popup').classList.add('show');
+				// 渲染小猫选择界面
+				renderCatSelection();
+			}
+		}
+
+		// 关闭聊天弹窗
+		function closeChatPopup() {
+			document.getElementById('chat-popup').classList.remove('show');
+			currentTaskId = null;
+			selectedCatsForTask = [];
+		}
+
+		// 接听电话
+		function acceptCall() {
+			document.getElementById('phone-choice').classList.remove('show');
+
+			setTimeout(() => {
+				// 显示电话动画
+				showPhoneAnimation(() => {
+					// 动画结束后显示聊天弹窗
+					document.getElementById('chat-popup').classList.add('show');
+					renderCatSelection();
+				});
+			}, 300);
+		}
+
+		// 拒绝电话
+		function declineCall() {
+			document.getElementById('phone-choice').classList.remove('show');
+			
+			// 移除被拒绝的任务
+			if (currentTaskId) {
+				tasks = tasks.filter(t => t.id !== currentTaskId);
+				checkedTasks.delete(currentTaskId);
+				currentTaskId = null;
+				renderTaskList();
+			}
+		}
+
+		// 显示电话动画
+		function showPhoneAnimation(callback) {
+			const overlay = document.getElementById('phone-overlay');
+			overlay.classList.add('show');
+			
+			// 2秒后关闭动画并执行回调
+			setTimeout(() => {
+				overlay.classList.remove('show');
+				setTimeout(callback, 300); // 等待淡出动画
+			}, 2000);
+		}
+
+		// 关闭聊天弹窗
+		function closeChatPopup() {
+			document.getElementById('chat-popup').classList.remove('show');
+			currentTaskId = null;
+		}
+
+		// 渲染小猫选择界面
+		function renderCatSelection() {
+			const task = tasks.find(t => t.id === currentTaskId);
+			if (!task) return;
+
+			const listEl = document.getElementById('cat-selection-list');
+			const summaryEl = document.getElementById('selected-cats-summary');
+			const hintEl = document.getElementById('cat-selection-hint');
+			const submitBtn = document.getElementById('submit-task-btn');
+
+			hintEl.textContent = `请选择 ${task.catsNeeded} 只 Lv.${task.catLevel} 小猫送出`;
+
+			// 渲染可选小猫（只显示符合等级要求的小猫）
+			listEl.innerHTML = '';
+			const eligibleCats = kittens.filter(cat => cat.level === task.catLevel);
+
+			eligibleCats.forEach(cat => {
+				const isSelected = selectedCatsForTask.includes(cat.id);
+				const isDisabled = selectedCatsForTask.length >= task.catsNeeded && !isSelected;
+
+				const catItem = document.createElement('div');
+				catItem.className = `cat-select-item ${isSelected ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}`;
+				catItem.innerHTML = `
+					<span class="cat-emoji">🐱</span>
+					<span class="cat-level">Lv.${cat.level}</span>
+				`;
+
+				if (!isDisabled) {
+					catItem.onclick = () => toggleCatSelection(cat.id);
+				}
+
+				listEl.appendChild(catItem);
+			});
+
+			if (eligibleCats.length === 0) {
+				listEl.innerHTML = `<div style="grid-column:span 3;text-align:center;color:#999;padding:20px;">暂无 Lv.${task.catLevel} 的小猫</div>`;
+			}
+
+			// 更新摘要
+			summaryEl.textContent = `已选择 ${selectedCatsForTask.length}/${task.catsNeeded} 只小猫`;
+
+			// 更新提交按钮状态
+			submitBtn.disabled = selectedCatsForTask.length !== task.catsNeeded || task.completed;
+			if (task.completed) {
+				submitBtn.textContent = '任务已完成';
+			} else {
+				submitBtn.textContent = '送出小猫并完成任务';
+			}
+		}
+
+		// 切换小猫选择
+		function toggleCatSelection(catId) {
+			const task = tasks.find(t => t.id === currentTaskId);
+			if (!task || task.completed) return;
+
+			const index = selectedCatsForTask.indexOf(catId);
+			if (index > -1) {
+				// 取消选择
+				selectedCatsForTask.splice(index, 1);
+			} else if (selectedCatsForTask.length < task.catsNeeded) {
+				// 添加选择
+				selectedCatsForTask.push(catId);
+			}
+
+			renderCatSelection();
+		}
+
+		// 提交任务
+		function submitTask() {
+			const task = tasks.find(t => t.id === currentTaskId);
+			if (!task || task.completed || selectedCatsForTask.length !== task.catsNeeded) return;
+
+			// 移除送出的小猫
+			selectedCatsForTask.forEach(catId => {
+				removeKittenById(catId);
+			});
+
+			// 完成任务
+			task.completed = true;
+
+			// 根据报酬类型发放奖励
+			if (task.isGoldReward) {
+				gems += task.rewardValue * 2;
+				task.messages.push({
+					sender: '💰',
+					content: `🎉 任务完成！${selectedCatsForTask.length}只小猫找到了新家！获得 ${task.rewardValue * 2} 金币！`,
+					isSystem: true,
+					time: new Date()
+				});
+			} else {
+				coins += task.rewardValue;
+				task.messages.push({
+					sender: '🎉',
+					content: `🎉 任务完成！${selectedCatsForTask.length}只小猫找到了新家！获得 ${task.rewardValue} 好感值！`,
+					isSystem: true,
+					time: new Date()
+				});
+			}
+
+			// 增加完成任务计数并检查成就
+			completedTasksCount++;
+			checkTaskAchievements();
+
+			// 清空选择
+			selectedCatsForTask = [];
+
+			// 关闭聊天弹窗
+			document.getElementById('chat-popup').classList.remove('show');
+
+			// 任务完成后从列表中移除
+			tasks = tasks.filter(t => t.id !== task.id);
+			currentTaskId = null;
+
+			// 刷新显示
+			renderTaskList();
+			updateCoinUI();
+			updateGemsUI();
+		}
+
+		// 打开任务栏
+		function openChat() {
+			const chatPanel = document.getElementById('chat-panel');
+			chatPanel.classList.add('show');
+		}
+
+		// 关闭任务栏
+		function closeChat() {
+			const chatPanel = document.getElementById('chat-panel');
+			chatPanel.classList.remove('show');
+		}
+
+		// 随机生成任务（等级>=2时，数量不限）
+		function tryGenerateTask() {
+			if (player.level > 1 && Math.random() < 0.4) {
+				const newTask = generateTask();
+				if (newTask) {
+					tasks.unshift(newTask);
+					renderTaskList();
+				}
+			}
+		}
+
+		// 启动任务系统
+		setInterval(tryGenerateTask, 30000); // 每30秒尝试生成任务
+		setTimeout(tryGenerateTask, 5000); // 5秒后首次尝试
+
 		function getSpawnPreview() {
 			let count = 1;
 			if (player.level >= 4) {
@@ -1046,7 +2156,7 @@
 			const levels = [];
 			for (let i = 0; i < count; i++) {
 				let toLevel = 0;
-				if (player.level > 2) {
+				if (player.level > 1) {
 					const chance = Math.min(0.15 * (player.level - 1), 0.6);
 					if (Math.random() < chance) {
 						const maxL = player.level;
@@ -1273,7 +2383,7 @@
 			}
 		});
 
-		// coin production: each n级小猫每分钟产生 (n+1)^2 个金币
+		// coin production: each n级小猫每分钟产生 (n+1)^2 个好感值
 		function calculateProduction() {
 			prodPerMinute = kittens.reduce((s,k)=> s + (k.level+1)*(k.level+1), 0);
 			updateCoinUI();
@@ -1309,8 +2419,10 @@
 		shopBtn.addEventListener('click', openShop);
 
 		updateCounts();
+		renderTaskList();
 		updatePlayerUI();
 		updateCoinUI();
+		updateGemsUI();
 		updateInventoryUI();
 	</script>
 </body>
