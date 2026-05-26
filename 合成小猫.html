@@ -13,7 +13,8 @@
 		}
 		body {
 			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
-			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			background: url('img/background.png') no-repeat center center fixed;
+			background-size: cover;
 			color:#222; 
 			display:flex; 
 			flex-direction:column; 
@@ -165,6 +166,11 @@
 			min-height: 80px;
 			touch-action: none;
 			box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+		}
+		.kitten-image {
+			width: 40px;
+			height: 40px;
+			object-fit: contain;
 		}
 		.kitten:hover {
 			transform: translateY(-4px);
@@ -656,8 +662,8 @@
 			right: 0;
 			width: 280px;
 			height: 100vh;
-			background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-			box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+			background: rgba(255, 255, 255, 0.95);
+			box-shadow: -4px 0 20px rgba(0,0,0,0.15);
 			display: flex;
 			flex-direction: column;
 			z-index: 300;
@@ -668,12 +674,12 @@
 			transform: translateX(0);
 		}
 		#chat-header {
-			background: rgba(255,255,255,0.15);
+			background: rgba(102, 126, 234, 0.9);
 			padding: 20px;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			border-bottom: 1px solid rgba(255,255,255,0.1);
+			border-bottom: 1px solid rgba(102, 126, 234, 0.2);
 		}
 		#chat-header h2 {
 			font-size: 16px;
@@ -886,6 +892,66 @@
 			background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
 			color: #667eea;
 			font-weight: 600;
+		}
+
+		/* 打字机动画 */
+		.chat-message.typing .msg-content::after {
+			content: '|';
+			animation: blink 0.5s infinite;
+		}
+		@keyframes blink {
+			0%, 100% { opacity: 1; }
+			50% { opacity: 0; }
+		}
+
+		/* 加速提示 */
+		#speed-hint {
+			position: fixed;
+			bottom: 20px;
+			left: 50%;
+			transform: translateX(-50%);
+			background: rgba(0,0,0,0.8);
+			color: white;
+			padding: 10px 20px;
+			border-radius: 20px;
+			font-size: 13px;
+			z-index: 1000;
+			display: none;
+			animation: fadeInOut 1.5s ease-in-out;
+		}
+		@keyframes fadeInOut {
+			0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+			20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+			80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+			100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+		}
+
+		/* 正在思考提示 */
+		.chat-message.thinking .msg-content {
+			background: rgba(255, 255, 255, 0.5) !important;
+			font-style: italic;
+		}
+
+		/* 打字指示器 */
+		.typing-indicator {
+			padding: 8px 16px;
+			display: flex;
+			gap: 4px;
+			align-items: center;
+		}
+		.typing-indicator span {
+			width: 8px;
+			height: 8px;
+			background: #999;
+			border-radius: 50%;
+			animation: typingBounce 1.4s infinite ease-in-out;
+		}
+		.typing-indicator span:nth-child(1) { animation-delay: 0s; }
+		.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+		.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+		@keyframes typingBounce {
+			0%, 80%, 100% { transform: translateY(0); }
+			40% { transform: translateY(-6px); }
 		}
 		.chat-popup-input-area {
 			padding: 16px;
@@ -1922,6 +1988,9 @@
 			<span class="chat-popup-close" onclick="closeChatPopup()">×</span>
 		</div>
 		<div id="chat-popup-messages" class="chat-popup-messages"></div>
+		<div id="typing-indicator" class="typing-indicator" style="display:none;">
+			<span></span><span></span><span></span>
+		</div>
 		<div id="chat-popup-action-area" class="chat-popup-input-area">
 			<div id="select-cats-wrapper">
 				<div id="cat-selection-hint">请选择要送出的小猫</div>
@@ -1931,6 +2000,9 @@
 			<button id="submit-task-btn" onclick="submitTask()">送出小猫并完成任务</button>
 		</div>
 	</div>
+
+	<!-- 加速提示 -->
+	<div id="speed-hint">加速中...</div>
 
 	<!-- 电话选择界面 -->
 	<div id="phone-choice" class="phone-overlay">
@@ -2759,33 +2831,191 @@
 				];
 			}
 
-			// 渲染消息
+			// 显示聊天弹窗
+			document.getElementById('chat-popup').classList.add('show');
+			
+			// 清空消息容器
 			const messagesContainer = document.getElementById('chat-popup-messages');
-			messagesContainer.innerHTML = task.messages.map(msg => `
-				<div class="chat-message ${msg.isSystem ? 'system' : ''}">
-					<div class="msg-sender">${msg.sender} · ${formatTime(msg.time || new Date())}</div>
-					<div class="msg-content">${msg.content.replace(/\n/g, '<br>')}</div>
-				</div>
-			`).join('');
+			messagesContainer.innerHTML = '';
+			
+			// 隐藏小猫选择区域，直到消息发送完毕
+			document.getElementById('select-cats-wrapper').style.display = 'none';
+			document.getElementById('submit-task-btn').style.display = 'none';
 
+			// 如果是第一次点击，显示电话选择界面
 			if (isFirstClick && !task.completed) {
 				// 显示电话选择界面
 				document.getElementById('phone-task-emoji').textContent = task.emoji;
 				document.getElementById('phone-task-name').textContent = task.title;
 				document.getElementById('phone-choice').classList.add('show');
 			} else {
-				// 非第一次点击，直接显示聊天弹窗
-				document.getElementById('chat-popup').classList.add('show');
+				// 非第一次点击，直接显示所有消息
+				messagesContainer.innerHTML = task.messages.map(msg => `
+					<div class="chat-message ${msg.isSystem ? 'system' : ''}">
+						<div class="msg-sender">${msg.sender} · ${formatTime(msg.time || new Date())}</div>
+						<div class="msg-content">${msg.content.replace(/\n/g, '<br>')}</div>
+					</div>
+				`).join('');
 				// 渲染小猫选择界面
 				renderCatSelection();
 			}
+		}
+
+		// 逐条显示消息
+		let isSpeedUp = false;
+		let messageQueue = [];
+		let isDisplayingMessages = false;
+
+		function displayMessagesOneByOne(messages) {
+			if (isDisplayingMessages) {
+				// 如果正在显示，直接显示所有消息并跳过
+				skipAllMessages();
+				return;
+			}
+			
+			messageQueue = [...messages];
+			isDisplayingMessages = true;
+			isSpeedUp = false;
+			displayNextMessage();
+		}
+
+		function displayNextMessage() {
+			if (messageQueue.length === 0) {
+				// 所有消息显示完毕，显示小猫选择界面
+				finishMessageDisplay();
+				return;
+			}
+
+			const msg = messageQueue.shift();
+			const messagesContainer = document.getElementById('chat-popup-messages');
+			
+			// 创建消息元素
+			const msgEl = document.createElement('div');
+			msgEl.className = `chat-message ${msg.isSystem ? 'system' : ''} typing`;
+			msgEl.innerHTML = `
+				<div class="msg-sender">${msg.sender} · ${formatTime(msg.time || new Date())}</div>
+				<div class="msg-content"></div>
+			`;
+			messagesContainer.appendChild(msgEl);
+
+			// 滚动到底部
+			messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+			// 打字机效果
+			const contentEl = msgEl.querySelector('.msg-content');
+			typeWriter(contentEl, msg.content, 0, () => {
+				msgEl.classList.remove('typing');
+				// 思考延迟（正常速度1-2秒，加速时0.1秒）
+				const thinkDelay = isSpeedUp ? 100 : 1000 + Math.random() * 1000;
+				setTimeout(displayNextMessage, thinkDelay);
+			});
+		}
+
+		function typeWriter(element, text, index, callback) {
+			if (index < text.length) {
+				// 根据是否加速调整打字速度
+				const charDelay = isSpeedUp ? 5 : 30;
+				if (text[index] === '\n') {
+					element.innerHTML += '<br>';
+				} else {
+					element.innerHTML += text[index];
+				}
+				setTimeout(() => typeWriter(element, text, index + 1, callback), charDelay);
+				
+				// 滚动到底部
+				const messagesContainer = document.getElementById('chat-popup-messages');
+				messagesContainer.scrollTop = messagesContainer.scrollHeight;
+			} else {
+				element.innerHTML = text.replace(/\n/g, '<br>');
+				callback();
+			}
+		}
+
+		function skipAllMessages() {
+			isSpeedUp = true;
+			if (messageQueue.length > 0) {
+				// 直接显示剩余消息
+				const messagesContainer = document.getElementById('chat-popup-messages');
+				messageQueue.forEach(msg => {
+					const msgEl = document.createElement('div');
+					msgEl.className = `chat-message ${msg.isSystem ? 'system' : ''}`;
+					msgEl.innerHTML = `
+						<div class="msg-sender">${msg.sender} · ${formatTime(msg.time || new Date())}</div>
+						<div class="msg-content">${msg.content.replace(/\n/g, '<br>')}</div>
+					`;
+					messagesContainer.appendChild(msgEl);
+				});
+				messageQueue = [];
+				setTimeout(finishMessageDisplay, 100);
+			}
+		}
+
+		function finishMessageDisplay() {
+			isDisplayingMessages = false;
+			isSpeedUp = false;
+			// 隐藏打字指示器
+			document.getElementById('typing-indicator').style.display = 'none';
+			// 显示小猫选择界面
+			document.getElementById('select-cats-wrapper').style.display = 'block';
+			document.getElementById('submit-task-btn').style.display = 'block';
+			renderCatSelection();
+		}
+
+		function showSpeedHint() {
+			const hint = document.getElementById('speed-hint');
+			hint.style.display = 'block';
+			setTimeout(() => {
+				hint.style.display = 'none';
+			}, 1500);
 		}
 
 		// 关闭聊天弹窗
 		function closeChatPopup() {
 			document.getElementById('chat-popup').classList.remove('show');
 			currentTaskId = null;
+			isDisplayingMessages = false;
+			messageQueue = [];
 			selectedCatsForTask = [];
+		}
+
+		// 长按加速功能
+		let pressTimer = null;
+
+		function initLongPressSpeedUp() {
+			const chatPopup = document.getElementById('chat-popup');
+			if (!chatPopup) return;
+
+			// 鼠标事件
+			chatPopup.addEventListener('mousedown', handleLongPressStart);
+			chatPopup.addEventListener('mouseup', handleLongPressEnd);
+			chatPopup.addEventListener('mouseleave', handleLongPressEnd);
+
+			// 触摸事件
+			chatPopup.addEventListener('touchstart', handleLongPressStart);
+			chatPopup.addEventListener('touchend', handleLongPressEnd);
+			chatPopup.addEventListener('touchcancel', handleLongPressEnd);
+		}
+
+		function handleLongPressStart(e) {
+			if (isDisplayingMessages) {
+				e.preventDefault();
+				pressTimer = setTimeout(() => {
+					isSpeedUp = true;
+					showSpeedHint();
+					skipAllMessages();
+				}, 500);
+			}
+		}
+
+		function handleLongPressEnd() {
+			clearTimeout(pressTimer);
+		}
+
+		// 页面加载完成后初始化长按功能
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initLongPressSpeedUp);
+		} else {
+			initLongPressSpeedUp();
 		}
 
 		// 接听电话
@@ -2795,9 +3025,11 @@
 			setTimeout(() => {
 				// 显示电话动画
 				showPhoneAnimation(() => {
-					// 动画结束后显示聊天弹窗
-					document.getElementById('chat-popup').classList.add('show');
-					renderCatSelection();
+					// 动画结束后开始逐条显示消息
+					const task = tasks.find(t => t.id === currentTaskId);
+					if (task) {
+						displayMessagesOneByOne(task.messages);
+					}
 				});
 			}, 300);
 		}
@@ -3096,7 +3328,9 @@
 			el.dataset.id = id;
 			el.dataset.level = level;
 			const prod = (level+1)*(level+1);
-			el.innerHTML = `<div class="face">🐱</div><div class="level">Lv.${level}</div><div class="coin-badge">+${prod}/min</div>`;
+			// 每个等级的小猫使用对应的图片
+			const faceContent = `<img src="img/${level}.png" alt="小猫" class="kitten-image">`;
+			el.innerHTML = `<div class="face">${faceContent}</div><div class="level">Lv.${level}</div><div class="coin-badge">+${prod}/min</div>`;
 			// enable drag to manually merge
 			el.draggable = true;
 			el.addEventListener('dragstart', (ev)=>{
@@ -3114,7 +3348,7 @@
 				const a = kittens.find(k=>k.id===draggedId);
 				const b = kittens.find(k=>k.id===targetId);
 				if (!a || !b) return;
-				if (a.level === b.level) {
+				if (a.level === b.level && a.level < 14) {
 					removeKittenById(a.id);
 					removeKittenById(b.id);
 					const newK = createKitten(a.level+1, true, true);
@@ -3159,7 +3393,8 @@
 				const lvls = Object.keys(groups).map(Number).sort((a,b)=>a-b);
 				for (const lv of lvls) {
 					const arr = groups[lv];
-					while (arr.length >= 2) {
+					// 14级小猫无法合成
+					while (arr.length >= 2 && lv < 14) {
 						const a = arr.pop();
 						const b = arr.pop();
 						removeKittenById(a.id);
